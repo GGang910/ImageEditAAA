@@ -879,47 +879,75 @@
         function undoEdit() { if (historyStack.length <= 1) return; redoStack.push(historyStack.pop()); const img = new Image(); img.onload = () => { editorCanvas.width = img.width; editorCanvas.height = img.height; editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height); editorCtx.drawImage(img, 0, 0); if (cropCurrentSize) cropCurrentSize.textContent = img.width + ' x ' + img.height; updateUndoRedoButtons(); }; img.src = historyStack[historyStack.length - 1]; }
         function redoEdit() { if (redoStack.length === 0) return; const rd = redoStack.pop(); historyStack.push(rd); const img = new Image(); img.onload = () => { editorCanvas.width = img.width; editorCanvas.height = img.height; editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height); editorCtx.drawImage(img, 0, 0); if (cropCurrentSize) cropCurrentSize.textContent = img.width + ' x ' + img.height; updateUndoRedoButtons(); }; img.src = rd; }
 
-        function drawMosaic(x, y, size, block, style, shape) {
-            const half = size / 2;
-            const sx = Math.max(0, Math.floor(x - half)), sy = Math.max(0, Math.floor(y - half));
-            const ex = Math.min(editorCanvas.width, Math.ceil(x + half)), ey = Math.min(editorCanvas.height, Math.ceil(y + half));
-            const w = ex - sx, h = ey - sy;
-            if (w <= 0 || h <= 0) return;
-            const factor = Math.max(2, block || 10);
-            const isCircle = shape !== 'square';
-
+        // 갤럭시식 모자이크: 스트로크 시작 시 "이미지 전체"를 한 번 모자이크한 레이어를 만들어 두고,
+        // 브러시로 문지르는 곳에만 그 레이어를 드러내는 방식. 블록 격자가 (0,0)에 고정되어 있어서
+        // 여러 번 문질러도 블록이 밀리거나 번지지 않고, 겹쳐 칠해도 결과가 항상 동일함.
+        let mosaicLayer = null;
+        function buildMosaicLayer(block, style) {
+            const W = editorCanvas.width, H = editorCanvas.height, factor = Math.max(2, block || 10);
+            const layer = document.createElement('canvas'); layer.width = W; layer.height = H;
+            const lctx = layer.getContext('2d');
+            if (style === 'blur') {
+                if ('filter' in lctx) {
+                    // 가장자리가 투명하게 빠지지 않도록 원본을 한 번 깔고 그 위에 블러
+                    lctx.drawImage(editorCanvas, 0, 0);
+                    lctx.filter = `blur(${factor * 0.8}px)`;
+                    lctx.drawImage(editorCanvas, 0, 0);
+                    lctx.filter = 'none';
+                } else {
+                    const sw = Math.max(1, Math.round(W / factor)), sh = Math.max(1, Math.round(H / factor));
+                    const tmp = document.createElement('canvas'); tmp.width = sw; tmp.height = sh;
+                    const tctx = tmp.getContext('2d'); tctx.imageSmoothingEnabled = true; tctx.imageSmoothingQuality = 'high';
+                    tctx.drawImage(editorCanvas, 0, 0, sw, sh);
+                    lctx.imageSmoothingEnabled = true; lctx.imageSmoothingQuality = 'high';
+                    lctx.drawImage(tmp, 0, 0, W, H);
+                }
+                return layer;
+            }
+            const srcData = editorCtx.getImageData(0, 0, W, H), s = srcData.data;
+            const out = lctx.createImageData(W, H), d = out.data;
             if (style === 'glass') {
-                // 유리(프로스트) 효과: 주변 픽셀을 무작위로 끌어와 자글자글하게
-                const id = editorCtx.getImageData(sx, sy, w, h), d = id.data, src = new Uint8ClampedArray(d), disp = factor, hh = half * half;
-                for (let py = 0; py < h; py++) {
-                    for (let px = 0; px < w; px++) {
-                        if (isCircle) { const cx = (sx + px) - x, cy = (sy + py) - y; if (cx * cx + cy * cy > hh) continue; }
-                        const nx = Math.min(w - 1, Math.max(0, px + Math.round((Math.random() - 0.5) * disp * 2)));
-                        const ny = Math.min(h - 1, Math.max(0, py + Math.round((Math.random() - 0.5) * disp * 2)));
-                        const si = (ny * w + nx) * 4, di = (py * w + px) * 4;
-                        d[di] = src[si]; d[di + 1] = src[si + 1]; d[di + 2] = src[si + 2]; d[di + 3] = src[si + 3];
+                // 유리: 픽셀마다 고정된 무작위 오프셋 (한 번만 계산 → 문질러도 자글거림이 변하지 않음)
+                for (let y = 0; y < H; y++) {
+                    for (let x = 0; x < W; x++) {
+                        const nx = Math.min(W - 1, Math.max(0, x + Math.round((Math.random() - 0.5) * factor * 2)));
+                        const ny = Math.min(H - 1, Math.max(0, y + Math.round((Math.random() - 0.5) * factor * 2)));
+                        const si = (ny * W + nx) * 4, di = (y * W + x) * 4;
+                        d[di] = s[si]; d[di + 1] = s[si + 1]; d[di + 2] = s[si + 2]; d[di + 3] = s[si + 3];
                     }
                 }
-                editorCtx.putImageData(id, sx, sy);
-                return;
-            }
-
-            // 픽셀 / 블러: 축소 후 확대 → 처리 결과를 별도 캔버스(proc)에 만든 뒤 합성
-            const smallW = Math.max(1, Math.floor(w / factor)), smallH = Math.max(1, Math.floor(h / factor));
-            const tmp = document.createElement('canvas'); tmp.width = smallW; tmp.height = smallH;
-            const tctx = tmp.getContext('2d'); tctx.imageSmoothingEnabled = true;
-            tctx.drawImage(editorCanvas, sx, sy, w, h, 0, 0, smallW, smallH);
-            const proc = document.createElement('canvas'); proc.width = w; proc.height = h;
-            const pctx = proc.getContext('2d'); pctx.imageSmoothingEnabled = (style === 'blur');
-            pctx.drawImage(tmp, 0, 0, smallW, smallH, 0, 0, w, h);
-            if (isCircle) {
-                pctx.globalCompositeOperation = 'destination-in';
-                pctx.beginPath(); pctx.arc(x - sx, y - sy, half, 0, Math.PI * 2); pctx.fill();
-                editorCtx.drawImage(proc, sx, sy);
             } else {
-                editorCtx.clearRect(sx, sy, w, h);
-                editorCtx.drawImage(proc, sx, sy);
+                // 픽셀: 전역 격자 기준으로 블록 안의 모든 픽셀을 정확히 평균 (알파 가중)
+                for (let by = 0; by < H; by += factor) {
+                    const ey = Math.min(H, by + factor);
+                    for (let bx = 0; bx < W; bx += factor) {
+                        const ex = Math.min(W, bx + factor);
+                        let r = 0, g = 0, b = 0, a = 0, n = 0;
+                        for (let y = by; y < ey; y++) for (let x = bx; x < ex; x++) {
+                            const i = (y * W + x) * 4, al = s[i + 3];
+                            r += s[i] * al; g += s[i + 1] * al; b += s[i + 2] * al; a += al; n++;
+                        }
+                        const R = a ? r / a : 0, G = a ? g / a : 0, B = a ? b / a : 0, A = a / n;
+                        for (let y = by; y < ey; y++) for (let x = bx; x < ex; x++) {
+                            const i = (y * W + x) * 4;
+                            d[i] = R; d[i + 1] = G; d[i + 2] = B; d[i + 3] = A;
+                        }
+                    }
+                }
             }
+            lctx.putImageData(out, 0, 0);
+            return layer;
+        }
+        function drawMosaic(x, y, size, block, style, shape) {
+            if (!mosaicLayer) mosaicLayer = buildMosaicLayer(block, style);
+            const half = size / 2;
+            editorCtx.save();
+            editorCtx.beginPath();
+            if (shape === 'square') editorCtx.rect(x - half, y - half, size, size);
+            else editorCtx.arc(x, y, half, 0, Math.PI * 2);
+            editorCtx.clip();
+            editorCtx.drawImage(mosaicLayer, 0, 0);
+            editorCtx.restore();
         }
         function drawMosaicLine(x1, y1, x2, y2, size, block, style, shape) {
             const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2), steps = Math.max(1, Math.floor(dist / (size / 4)));
@@ -1068,7 +1096,7 @@
                 tempCanvas.width = editorCanvas.width; 
                 tempCanvas.height = editorCanvas.height; 
                 tempCanvas.getContext('2d').drawImage(editorCanvas, 0, 0); 
-            } else if (currentTool === 'brush-mosaic') drawMosaic(lastX, lastY, parseInt(toolSize.value), mosaicBlock, mosaicStyle, mosaicShape); 
+            } else if (currentTool === 'brush-mosaic') { mosaicLayer = null; drawMosaic(lastX, lastY, parseInt(toolSize.value), mosaicBlock, mosaicStyle, mosaicShape); } 
             else if (currentTool === 'brush-color') drawBrush(lastX, lastY, parseInt(toolSize.value), toolColor.value); 
             else if (currentTool === 'eraser') drawEraser(lastX, lastY, parseInt(toolSize.value)); 
             else if (currentTool === 'smart-eraser') {
