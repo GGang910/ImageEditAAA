@@ -312,15 +312,23 @@
         .random-name-btn { padding: 0 16px; background: var(--accent-bg); border: 2px solid var(--border); border-radius: 12px; font-size: 20px; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
         .random-name-btn:hover { border-color: var(--accent); background: var(--accent-soft); transform: rotate(15deg); }
         .random-name-btn:active { transform: rotate(360deg); transition: transform 0.5s; }
-        .fav-name-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-        .fav-name-list:empty { display: none; }
+        .fav-name-box { margin-top: 10px; padding: 10px 12px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; }
+        .fav-name-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+        .fav-name-title { font-size: 13px; font-weight: 700; color: var(--text); }
+        .fav-name-sub { font-size: 11px; font-weight: 500; color: var(--text-secondary); }
+        .fav-name-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .fav-name-empty { font-size: 12px; color: var(--text-secondary); padding: 2px 0; }
+        .fav-add-row { display: flex; gap: 6px; margin-top: 10px; }
+        .fav-add-input { flex: 1; min-width: 0; padding: 8px 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 13px; font-weight: 600; font-family: inherit; background: var(--card); color: var(--text); }
+        .fav-add-input:focus { outline: none; border-color: var(--accent); }
+        .fav-add-btn { padding: 8px 14px; background: var(--accent); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; white-space: nowrap; }
+        .fav-add-btn:hover { filter: brightness(1.1); }
         .fav-name-chip { display: inline-flex; align-items: center; gap: 2px; padding: 5px 6px 5px 10px; background: var(--accent-bg); border: 2px solid var(--accent-soft); border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--text); cursor: pointer; font-family: inherit; transition: all 0.15s; max-width: 100%; }
         .fav-name-chip:hover { border-color: var(--accent); color: var(--accent); }
         .fav-name-chip.current { background: var(--accent); border-color: var(--accent); color: white; }
         .fav-name-chip .fav-name-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .fav-name-x { font-size: 10px; line-height: 1; padding: 3px 5px; border-radius: 50%; color: inherit; opacity: 0.6; }
         .fav-name-x:hover { opacity: 1; background: #ff5c5c; color: white; }
-        .fav-name-btn.saved { background: var(--accent); border-color: var(--accent); }
 
         .tag-file-row { display: flex; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
         .tag-file-btn { flex: 1; padding: 6px 8px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; color: var(--text-secondary); transition: all 0.15s; }
@@ -353,9 +361,15 @@
                             <input type="text" class="filename-input" id="baseFilename" placeholder="1, 2, 3... (비우면 숫자로 저장)">
                             <button class="random-name-btn" id="randomNameBtn" title="랜덤 이름 생성">🎲</button>
                             <button class="random-name-btn" id="randomNumBtn" title="무작위 숫자 이름">🔢</button>
-                            <button class="random-name-btn fav-name-btn" id="favNameBtn" title="자주 쓰는 이름으로 저장 / 해제">⭐</button>
                         </div>
-                        <div class="fav-name-list" id="favNameList"></div>
+                        <div class="fav-name-box">
+                            <div class="fav-name-head"><span class="fav-name-title">⭐ 자주 쓰는 이름</span><span class="fav-name-sub">누르면 파일명으로 들어가요</span></div>
+                            <div class="fav-name-list" id="favNameList"></div>
+                            <div class="fav-add-row">
+                                <input type="text" class="fav-add-input" id="favAddInput" placeholder="자주 쓰는 이름 입력" maxlength="60">
+                                <button type="button" class="fav-add-btn" id="favAddBtn">+ 등록</button>
+                            </div>
+                        </div>
                         <label class="keep-original-row">
                             <input type="checkbox" id="keepOriginalName">
                             <span>원본 파일명 유지 (확장자만 변환)</span>
@@ -1672,40 +1686,43 @@
             showToast('🎲 ' + baseFilenameInput.value);
         });
 
-        // ⭐ 자주 쓰는 이름 (이 브라우저에 저장)
-        const favNameBtn = document.getElementById('favNameBtn'), favNameList = document.getElementById('favNameList');
+        // ⭐ 자주 쓰는 이름: 직접 등록해 두고, 누르면 출력 파일명으로 들어감 (이 브라우저에 저장)
+        const favNameList = document.getElementById('favNameList'), favAddInput = document.getElementById('favAddInput'), favAddBtn = document.getElementById('favAddBtn');
         let favNames = [];
         try { favNames = JSON.parse(localStorage.getItem('favFilenames') || '[]'); } catch (e) { favNames = []; }
         function saveFavNames() { try { localStorage.setItem('favFilenames', JSON.stringify(favNames)); } catch (e) {} }
         function renderFavNames() {
             const cur = baseFilenameInput.value.trim();
             favNameList.innerHTML = '';
+            if (!favNames.length) { favNameList.innerHTML = '<span class="fav-name-empty">아직 등록한 이름이 없어요. 아래에 입력해서 등록하세요.</span>'; return; }
             favNames.forEach(name => {
                 const chip = document.createElement('button');
                 chip.type = 'button';
                 chip.className = 'fav-name-chip' + (name === cur ? ' current' : '');
-                chip.title = name;
+                chip.title = name === cur ? '다시 누르면 선택 해제' : name + ' 으로 파일명 지정';
                 const text = document.createElement('span'); text.className = 'fav-name-text'; text.textContent = name;
-                const x = document.createElement('span'); x.className = 'fav-name-x'; x.textContent = '✕'; x.title = '삭제';
+                const x = document.createElement('span'); x.className = 'fav-name-x'; x.textContent = '✕'; x.title = '등록 삭제';
                 chip.append(text, x);
                 chip.addEventListener('click', (e) => {
                     if (e.target === x) { favNames = favNames.filter(n => n !== name); saveFavNames(); renderFavNames(); showToast('⭐ 삭제: ' + name); return; }
                     if (keepOriginalCheckbox.checked || randomEachToggle.checked) { keepOriginalCheckbox.checked = false; randomEachToggle.checked = false; baseFilenameInput.classList.remove('disabled'); }
-                    baseFilenameInput.value = name;
+                    baseFilenameInput.value = (name === baseFilenameInput.value.trim()) ? '' : name; // 선택된 이름을 다시 누르면 해제
                     updateImageGrid();
                     renderFavNames();
                 });
                 favNameList.appendChild(chip);
             });
-            favNameBtn.classList.toggle('saved', !!cur && favNames.includes(cur));
         }
-        favNameBtn.addEventListener('click', () => {
-            const cur = baseFilenameInput.value.trim();
-            if (!cur) { showToast('이름을 먼저 입력하세요'); return; }
-            if (favNames.includes(cur)) { favNames = favNames.filter(n => n !== cur); showToast('⭐ 삭제: ' + cur); }
-            else { favNames.unshift(cur); if (favNames.length > 30) favNames.pop(); showToast('⭐ 저장: ' + cur); }
-            saveFavNames(); renderFavNames();
-        });
+        function addFavName() {
+            const name = favAddInput.value.trim();
+            if (!name) { showToast('등록할 이름을 입력하세요'); favAddInput.focus(); return; }
+            if (favNames.includes(name)) { showToast('이미 등록된 이름이에요'); return; }
+            if (favNames.length >= 50) { showToast('최대 50개까지 등록할 수 있어요'); return; }
+            favNames.push(name); saveFavNames(); favAddInput.value = ''; renderFavNames();
+            showToast('⭐ 등록: ' + name);
+        }
+        favAddBtn.addEventListener('click', addFavName);
+        favAddInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); addFavName(); } });
         baseFilenameInput.addEventListener('input', renderFavNames);
         randomNameBtn.addEventListener('click', renderFavNames);
 
