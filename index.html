@@ -121,6 +121,25 @@
         .image-download-btn { position: absolute; bottom: 70px; right: 10px; width: 32px; height: 32px; background: var(--accent); border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.2s; }
         .image-item:hover .image-download-btn { opacity: 1; }
         .image-download-btn:hover { filter: brightness(1.1); transform: scale(1.1); }
+        .image-edit-btn { position: absolute; bottom: 70px; right: 50px; width: 32px; height: 32px; background: var(--card); border: 2px solid var(--accent); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.2s; }
+        .image-item:hover .image-edit-btn { opacity: 1; }
+        .image-edit-btn:hover { transform: scale(1.1); }
+        @media (hover: none) { .image-download-btn, .image-edit-btn { opacity: 1; } }
+        @media (max-width: 600px) {
+            body { padding: 16px 10px; }
+            .theme-switcher { margin-bottom: 16px; }
+            .card { padding: 20px 14px; border-radius: 18px; }
+            .settings-panel .card { position: static; }
+            .image-grid { padding: 12px; gap: 12px; max-height: none; }
+            .image-info { padding: 8px 10px; }
+            .image-name { font-size: 12px; }
+            .image-size, .image-output { font-size: 11px; }
+            .image-order { width: 24px; height: 24px; font-size: 12px; top: 6px; left: 6px; }
+            .image-checkbox { top: 6px; right: 6px; }
+            .image-download-btn, .image-edit-btn { width: 36px; height: 36px; bottom: auto; right: 6px; }
+            .image-edit-btn { top: 38px; } .image-download-btn { top: 80px; }
+            .help-text { font-size: 12px; }
+        }
         .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-secondary); }
         .empty-icon { font-size: 56px; margin-bottom: 16px; opacity: 0.6; }
         .empty-text { font-size: 16px; font-weight: 500; line-height: 1.6; }
@@ -129,78 +148,84 @@
         .editor-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); display: none; justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(8px); }
         .editor-overlay.active { display: flex; }
         body.editor-open { overflow: hidden; position: fixed; width: 100%; height: 100%; }
-        .editor-container { background: var(--card); border-radius: 20px; max-width: 95vw; max-height: 95vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); overflow: hidden; }
-        .editor-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
-        .editor-title { font-size: 18px; font-weight: 700; color: var(--text); }
-        .editor-header-btns { display: flex; align-items: center; gap: 8px; }
-        .editor-nav-btn { width: 36px; height: 36px; border-radius: 8px; background: var(--input-bg); border: 2px solid var(--border); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s; font-weight: 700; }
+        .editor-container { background: var(--card); border-radius: 20px; width: min(1400px, 95vw); height: min(920px, 95vh); height: min(920px, 95dvh); display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); overflow: hidden; }
+        .editor-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+        .editor-title { flex: 1; min-width: 0; font-size: 17px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .editor-img-info { font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-left: 6px; }
+        .editor-header-btns { display: flex; align-items: center; gap: 6px; }
+        .editor-nav-btn { width: 38px; height: 38px; border-radius: 10px; background: var(--input-bg); border: 2px solid var(--border); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; font-weight: 700; font-family: inherit; }
         .editor-nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
         .editor-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-        .editor-close { width: 36px; height: 36px; border-radius: 50%; background: var(--input-bg); border: 2px solid var(--border); cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s; }
+        .editor-close { width: 38px; height: 38px; border-radius: 50%; background: var(--input-bg); border: 2px solid var(--border); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); transition: all 0.2s; flex-shrink: 0; }
         .editor-close:hover { border-color: var(--accent); color: var(--accent); }
-        .editor-body { display: flex; flex: 1; overflow: hidden; }
-        .editor-toolbar { width: 240px; background: var(--input-bg); border-right: 1px solid var(--border); padding: 16px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+        .editor-body { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+        .editor-toolbar { width: 270px; flex-shrink: 0; background: var(--input-bg); border-right: 1px solid var(--border); padding: 14px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
         .tool-section { display: flex; flex-direction: column; gap: 8px; }
         .tool-section-title { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
-        .tool-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-        .tool-btn { aspect-ratio: 1; border-radius: 8px; background: var(--card); border: 2px solid var(--border); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; color: var(--text); }
+        .tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .tool-btn { height: 54px; border-radius: 10px; background: var(--card); border: 2px solid var(--border); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: all 0.15s; color: var(--text); font-family: inherit; padding: 2px; }
         .tool-btn:hover { border-color: var(--accent-soft); }
-        .tool-btn.active { border-color: var(--accent); background: var(--accent-bg); }
-        .tool-divider { height: 1px; background: var(--border); margin: 4px 0; }
+        .tool-btn.active { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
+        .tool-icon { font-size: 18px; line-height: 1; }
+        .tool-name { font-size: 10px; font-weight: 700; white-space: nowrap; }
         .option-group { display: flex; flex-direction: column; gap: 10px; }
         .option-row { display: flex; align-items: center; gap: 6px; }
-        .option-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); min-width: 28px; }
-        .option-slider { flex: 1; -webkit-appearance: none; height: 6px; background: var(--border); border-radius: 3px; }
-        .option-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; cursor: pointer; }
-        .option-input { width: 50px; padding: 4px 6px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 6px; font-size: 12px; font-weight: 700; font-family: inherit; color: var(--accent); text-align: center; }
+        .option-row.col { flex-direction: column; align-items: stretch; }
+        .option-label { font-size: 11px; font-weight: 700; color: var(--text-secondary); min-width: 30px; flex-shrink: 0; }
+        .option-slider { flex: 1; min-width: 0; -webkit-appearance: none; appearance: none; height: 6px; background: var(--border); border-radius: 3px; }
+        .option-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--accent); border-radius: 50%; cursor: pointer; }
+        .option-slider::-moz-range-thumb { width: 18px; height: 18px; background: var(--accent); border: none; border-radius: 50%; cursor: pointer; }
+        .option-input { width: 56px; padding: 5px 6px; background: var(--card); border: 2px solid var(--border); border-radius: 6px; font-size: 12px; font-weight: 700; font-family: inherit; color: var(--accent); text-align: center; }
         .option-input:focus { outline: none; border-color: var(--accent); }
-        .color-row { display: flex; align-items: center; gap: 6px; }
-        .color-picker { flex: 1; height: 28px; border: 2px solid var(--border); border-radius: 6px; cursor: pointer; padding: 2px; }
-        .crop-options { display: none; flex-direction: column; gap: 8px; margin-top: 8px; padding: 10px; background: var(--card); border: 2px solid var(--accent); border-radius: 8px; }
-        .crop-options.active { display: flex; }
-        .crop-info { font-size: 11px; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600; }
-        .crop-info span { color: var(--accent); font-weight: 700; }
-        .crop-mode-row { display: flex; gap: 4px; margin-bottom: 6px; }
-        .crop-mode-btn { flex: 1; padding: 6px; border: 2px solid var(--border); border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer; font-family: inherit; background: var(--input-bg); color: var(--text-secondary); }
-        .mosaic-style-btn { flex: 1; padding: 5px 2px; border: 2px solid var(--border); border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; background: var(--input-bg); color: var(--text-secondary); transition: all 0.15s; }
-        .mosaic-style-btn:hover { border-color: var(--accent-soft); }
-        .mosaic-style-btn.active { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
-        .mosaic-shape-btn { flex: 1; padding: 5px 2px; border: 2px solid var(--border); border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; background: var(--input-bg); color: var(--text-secondary); transition: all 0.15s; }
-        .mosaic-shape-btn:hover { border-color: var(--accent-soft); }
-        .mosaic-shape-btn.active { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
-        .crop-mode-btn.active { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
-        .crop-input-row { display: flex; align-items: center; gap: 4px; }
-        .crop-input-row label { font-size: 10px; font-weight: 600; color: var(--text-secondary); min-width: 16px; }
-        .crop-input { width: 70px; padding: 4px 6px; background: var(--input-bg); border: 2px solid var(--border); border-radius: 6px; font-size: 11px; font-weight: 700; font-family: inherit; color: var(--accent); text-align: center; }
-        .crop-input:focus { outline: none; border-color: var(--accent); }
-        .crop-btn-row { display: flex; gap: 4px; margin-top: 4px; }
-        .crop-apply-btn { flex: 1; padding: 6px; border: none; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; background: var(--accent); color: white; }
-        .crop-apply-btn:hover { filter: brightness(1.1); }
-        .crop-apply-btn.all { background: #00b080; }
-        .crop-reset-btn { padding: 6px 10px; border: 2px solid var(--border); border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; background: var(--input-bg); color: var(--text-secondary); }
-        .crop-reset-btn:hover { border-color: var(--accent); color: var(--accent); }
-        .editor-canvas-area { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; background: var(--bg); min-width: 500px; min-height: 400px; position: relative; overflow: hidden; }
-        .editor-canvas { max-width: 100%; max-height: 100%; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); cursor: crosshair; touch-action: none; }
-        .img-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; background: var(--card); border: 2px solid var(--border); cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10; user-select: none; }
-        .img-nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); transform: translateY(-50%) scale(1.1); }
-        .img-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .seg { display: flex; gap: 4px; flex: 1; flex-wrap: wrap; }
+        .seg-btn { flex: 1; min-width: 0; padding: 7px 4px; border: 2px solid var(--border); border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; background: var(--card); color: var(--text-secondary); transition: all 0.15s; white-space: nowrap; }
+        .seg-btn:hover { border-color: var(--accent-soft); }
+        .seg-btn.active { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
+        .color-picker { flex: 1; height: 32px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; padding: 2px; background: var(--card); }
+        .color-swatches { display: flex; gap: 4px; }
+        .color-swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; padding: 0; }
+        .option-hint { font-size: 11px; line-height: 1.5; color: var(--text-secondary); font-weight: 500; padding: 8px 10px; background: var(--card); border: 1px dashed var(--border); border-radius: 8px; }
+        .option-hint b { color: var(--accent); }
+        .text-input-area { width: 100%; min-height: 64px; padding: 8px 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; font-weight: 600; font-family: inherit; background: var(--card); color: var(--text); resize: vertical; }
+        .text-input-area:focus { outline: none; border-color: var(--accent); }
+        .num-row { display: flex; align-items: center; gap: 4px; }
+        .num-row label { font-size: 11px; font-weight: 700; color: var(--text-secondary); min-width: 14px; }
+        .num-row .option-input { flex: 1; width: 0; }
+        .lock-btn { flex: 0 0 auto !important; width: 34px; }
+        .act-row { display: flex; gap: 6px; }
+        .act-btn { flex: 1; padding: 9px 6px; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; background: var(--accent); color: white; white-space: nowrap; }
+        .act-btn:hover { filter: brightness(1.1); }
+        .act-btn.alt { background: #00b080; }
+        .act-btn.ghost { background: var(--card); border: 2px solid var(--border); color: var(--text-secondary); }
+        .act-btn.ghost:hover { border-color: var(--accent); color: var(--accent); filter: none; }
+        .act-btn.big { font-size: 20px; padding: 8px 4px; }
+        .editor-canvas-area { flex: 1; min-width: 0; min-height: 0; position: relative; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none;
+            background-color: var(--bg); background-image: linear-gradient(45deg, rgba(128,128,128,.12) 25%, transparent 25%, transparent 75%, rgba(128,128,128,.12) 75%), linear-gradient(45deg, rgba(128,128,128,.12) 25%, transparent 25%, transparent 75%, rgba(128,128,128,.12) 75%); background-size: 20px 20px; background-position: 0 0, 10px 10px; }
+        .canvas-stage { position: absolute; transform-origin: center center; box-shadow: 0 4px 20px rgba(0,0,0,0.3); cursor: crosshair; }
+        .canvas-stage.pan { cursor: grab; }
+        .canvas-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        .preview-canvas { pointer-events: none; }
+        .img-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: var(--card); border: 2px solid var(--border); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10; opacity: 0.85; }
+        .img-nav-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); opacity: 1; }
+        .img-nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
         .img-nav-btn.prev { left: 10px; }
         .img-nav-btn.next { right: 10px; }
-        .crop-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: none; }
-        .crop-overlay.active { display: block; pointer-events: auto; }
-        .crop-box { position: absolute; border: 2px dashed var(--accent); background: transparent; cursor: move; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5); }
-        .crop-handle { position: absolute; width: 14px; height: 14px; background: var(--accent); border: 2px solid white; border-radius: 50%; }
-        .crop-handle.nw { top: -7px; left: -7px; cursor: nw-resize; }
-        .crop-handle.ne { top: -7px; right: -7px; cursor: ne-resize; }
-        .crop-handle.sw { bottom: -7px; left: -7px; cursor: sw-resize; }
-        .crop-handle.se { bottom: -7px; right: -7px; cursor: se-resize; }
-        .crop-handle.n { top: -7px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
-        .crop-handle.s { bottom: -7px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
-        .crop-handle.w { top: 50%; left: -7px; transform: translateY(-50%); cursor: w-resize; }
-        .crop-handle.e { top: 50%; right: -7px; transform: translateY(-50%); cursor: e-resize; }
-        .crop-size-label { position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; white-space: nowrap; }
-        .brush-cursor { position: fixed; border: 2px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; display: none; transform: translate(-50%, -50%); background: rgba(255, 107, 150, 0.15); }
+        .zoom-badge { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); background: rgba(0,0,0,0.55); color: white; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; pointer-events: none; z-index: 10; }
+        .crop-box { position: absolute; display: none; border: calc(2px / var(--z, 1)) dashed #fff; outline: calc(1px / var(--z, 1)) solid rgba(0,0,0,.5); box-shadow: 0 0 0 99999px rgba(0, 0, 0, 0.5); cursor: move; }
+        .crop-box.active { display: block; }
+        .crop-box::before, .crop-box::after { content: ''; position: absolute; pointer-events: none; border: 0 solid rgba(255,255,255,.45); }
+        .crop-box::before { left: 33.33%; right: 33.33%; top: 0; bottom: 0; border-left-width: calc(1px / var(--z, 1)); border-right-width: calc(1px / var(--z, 1)); }
+        .crop-box::after { top: 33.33%; bottom: 33.33%; left: 0; right: 0; border-top-width: calc(1px / var(--z, 1)); border-bottom-width: calc(1px / var(--z, 1)); }
+        .crop-handle { position: absolute; width: calc(18px / var(--z, 1)); height: calc(18px / var(--z, 1)); margin: calc(-9px / var(--z, 1)); background: var(--accent); border: calc(2px / var(--z, 1)) solid white; border-radius: 50%; z-index: 1; }
+        .crop-handle::after { content: ''; position: absolute; inset: -12px; }
+        .crop-handle.nw { top: 0; left: 0; cursor: nwse-resize; } .crop-handle.ne { top: 0; left: 100%; cursor: nesw-resize; }
+        .crop-handle.sw { top: 100%; left: 0; cursor: nesw-resize; } .crop-handle.se { top: 100%; left: 100%; cursor: nwse-resize; }
+        .crop-handle.n { top: 0; left: 50%; cursor: ns-resize; } .crop-handle.s { top: 100%; left: 50%; cursor: ns-resize; }
+        .crop-handle.w { top: 50%; left: 0; cursor: ew-resize; } .crop-handle.e { top: 50%; left: 100%; cursor: ew-resize; }
+        .crop-size-label { position: absolute; top: 100%; left: 50%; transform: translate(-50%, 0) scale(calc(1 / var(--z, 1))); transform-origin: top center; margin-top: 10px; background: var(--accent); color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; white-space: nowrap; pointer-events: none; }
+        .brush-cursor { position: fixed; border: 2px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; display: none; transform: translate(-50%, -50%); background: rgba(255, 107, 150, 0.15); box-shadow: 0 0 0 1px rgba(255,255,255,.7); }
         .brush-cursor.active { display: block; }
+        .brush-cursor.square { border-radius: 3px; }
         .brush-cursor.mosaic { border-style: dashed; background: rgba(128, 128, 128, 0.2); border-color: #666; }
         .brush-cursor.eraser { border-style: dotted; background: rgba(255, 255, 255, 0.3); border-color: #00aa00; }
         .save-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 4000; backdrop-filter: blur(4px); }
@@ -214,30 +239,43 @@
         .save-modal-btn.discard { background: var(--input-bg); color: #ff5c5c; border: 2px solid #ff5c5c; }
         .save-modal-btn.cancel { background: var(--input-bg); color: var(--text-secondary); border: 2px solid var(--border); }
         .save-modal-btn.save { background: var(--accent); color: white; }
-        .editor-footer { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-top: 1px solid var(--border); }
+        .editor-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; border-top: 1px solid var(--border); }
         .editor-shortcut { font-size: 12px; color: var(--text-secondary); }
         .editor-shortcut kbd { background: var(--input-bg); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-family: inherit; font-weight: 600; }
-        .editor-buttons { display: flex; gap: 12px; }
-        .editor-btn { padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+        .editor-buttons { display: flex; gap: 10px; }
+        .editor-btn { padding: 11px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-family: inherit; }
         .editor-btn.secondary { background: var(--input-bg); border: 2px solid var(--border); color: var(--text-secondary); }
         .editor-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
         .editor-btn.primary { background: var(--accent); border: none; color: white; }
         .editor-btn.primary:hover { filter: brightness(1.1); }
+        .touch-only { display: none; }
+        @media (hover: none) and (pointer: coarse) { .touch-only { display: inline; } .mouse-only { display: none; } }
         @media (max-width: 768px) {
-            .editor-container { max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; border-radius: 0; }
+            .editor-container { width: 100vw; height: 100vh; height: 100dvh; border-radius: 0; }
+            .editor-header { padding: 8px 10px; gap: 6px; }
+            .editor-title { font-size: 15px; }
+            .editor-img-info { display: none; }
+            .editor-nav-btn, .editor-close { width: 36px; height: 36px; font-size: 16px; }
             .editor-body { flex-direction: column; }
-            .editor-toolbar { width: 100%; flex-direction: row; flex-wrap: wrap; padding: 10px; gap: 10px; border-right: none; border-bottom: 1px solid var(--border); overflow-x: auto; }
-            .tool-section { flex-direction: row; align-items: center; gap: 6px; }
+            .editor-toolbar { width: 100%; max-height: 44vh; max-height: 44dvh; border-right: none; border-top: 1px solid var(--border); padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); gap: 10px; order: 2; }
+            #toolSection { order: 2; }
+            #optionsSection { order: 1; }
             .tool-section-title { display: none; }
-            .tool-grid { display: flex; gap: 4px; }
-            .tool-btn { width: 36px; height: 36px; }
-            .tool-divider { width: 1px; height: 28px; margin: 0 4px; }
-            .editor-canvas-area { min-width: unset; min-height: 200px; padding: 10px; }
-            .img-nav-btn { width: 36px; height: 36px; font-size: 16px; }
-            .editor-footer { flex-direction: column; gap: 12px; padding: 12px 16px; }
-            .editor-shortcut { font-size: 10px; text-align: center; }
+            .tool-grid { display: flex; overflow-x: auto; gap: 6px; scrollbar-width: none; margin: 0 -12px; padding: 0 12px; }
+            .tool-grid::-webkit-scrollbar { display: none; }
+            .tool-btn { flex: 0 0 auto; width: 62px; height: 52px; }
+            .option-slider::-webkit-slider-thumb { width: 24px; height: 24px; }
+            .option-slider::-moz-range-thumb { width: 24px; height: 24px; }
+            .option-input { font-size: 14px; padding: 6px; }
+            .text-input-area { font-size: 16px; }
+            .seg-btn { padding: 9px 4px; font-size: 12px; }
+            .option-hint { font-size: 11px; padding: 6px 8px; }
+            .img-nav-btn { width: 34px; height: 34px; font-size: 14px; }
+            .img-nav-btn.prev { left: 6px; } .img-nav-btn.next { right: 6px; }
+            .editor-footer { padding: 8px 12px; }
+            .editor-shortcut { display: none; }
             .editor-buttons { width: 100%; }
-            .editor-btn { flex: 1; padding: 14px 16px; }
+            .editor-btn { flex: 1; padding: 12px 16px; }
         }
         .meta-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-top: 4px; display: inline-block; }
         .meta-badge.has-meta { background: #ffcccc; color: #cc0000; }
@@ -322,6 +360,10 @@
                             <input type="checkbox" id="keepOriginalName">
                             <span>원본 파일명 유지 (확장자만 변환)</span>
                         </label>
+                        <label class="keep-original-row">
+                            <input type="checkbox" id="randomEachToggle">
+                            <span>🔢 파일마다 다른 무작위 숫자 이름</span>
+                        </label>
                     </div>
                     <div class="toggle-section">
                         <div class="section-title">🧹 메타데이터 제거</div>
@@ -353,6 +395,10 @@
                             <div class="quality-warning" id="qualityWarning">⚠️ 품질 100%여도 원본보다 화질 저하될 수 있음. 무손실 원하면 PNG 선택!</div>
                         </div>
                     </div>
+                    <label class="keep-original-row" id="zipRow" style="display: none;">
+                        <input type="checkbox" id="zipToggle">
+                        <span>📦 ZIP 파일 하나로 묶어서 받기</span>
+                    </label>
                     <button class="process-btn" id="processBtn">처리 및 다운로드</button>
                     <div class="status" id="status"></div>
                 </div>
@@ -394,7 +440,7 @@
                         </div>
                         <button class="action-btn" id="tagSortBtn" disabled>📑 태그별 정렬</button>
                     </div>
-                    <div class="help-text" id="helpText">💡 <span>클릭</span> 다중 선택 • <span>더블클릭</span> 편집 • <span>Shift+클릭</span> 범위 선택 • <span>드래그</span> 순서 이동 • <span>에셋 태그</span> 일괄 적용</div>
+                    <div class="help-text" id="helpText">💡 <span>클릭</span> 다중 선택 • <span>더블클릭</span> 또는 <span>✏️</span> 편집 • <span>Shift+클릭</span> 범위 선택 • <span>드래그</span> 순서 이동 • <span>에셋 태그</span> 일괄 적용</div>
                     <div class="image-grid" id="imageGrid"></div>
                 </div>
             </div>
@@ -416,76 +462,76 @@
     <div class="editor-overlay" id="editorOverlay">
         <div class="editor-container">
             <div class="editor-header">
-                <span class="editor-title">🎨 이미지 편집</span>
+                <button class="editor-close" id="editorClose" title="닫기 (ESC)">✕</button>
+                <span class="editor-title">🎨 이미지 편집<span class="editor-img-info" id="editorImgInfo"></span></span>
                 <div class="editor-header-btns">
-                    <button class="editor-nav-btn" id="undoBtn" title="되돌리기">◀</button>
-                    <button class="editor-nav-btn" id="redoBtn" title="다시하기">▶</button>
-                    <button class="editor-close" id="editorClose">✕</button>
+                    <button class="editor-nav-btn" id="undoBtn" title="되돌리기 (Ctrl+Z)">↶</button>
+                    <button class="editor-nav-btn" id="redoBtn" title="다시하기 (Ctrl+Y)">↷</button>
+                    <button class="editor-nav-btn" id="fitBtn" title="화면에 맞추기 (0)">⤢</button>
                 </div>
             </div>
             <div class="editor-body">
                 <div class="editor-toolbar">
-                    <div class="tool-section">
+                    <div class="tool-section" id="toolSection">
                         <div class="tool-section-title">도구</div>
                         <div class="tool-grid">
-                    <button class="tool-btn active" data-tool="brush-color" title="브러시">🖌️</button>
-                    <button class="tool-btn" data-tool="eraser" title="지우개">🧽</button>
-                    <button class="tool-btn" data-tool="brush-mosaic" title="모자이크">🔲</button>
-                    <button class="tool-btn" data-tool="rect" title="사각형">⬛</button>
-                    <button class="tool-btn" data-tool="crop" title="자르기">✂️</button>
-                    <button class="tool-btn" data-tool="chromakey" title="배경 투명화">🪄</button>
-                    <button class="tool-btn" data-tool="smart-eraser" title="스마트 배경 지우개(머리카락용)">🧹</button>
-                </div>
+                            <button class="tool-btn active" data-tool="brush" title="브러시"><span class="tool-icon">🖌️</span><span class="tool-name">브러시</span></button>
+                            <button class="tool-btn" data-tool="eraser" title="지우개 (원본으로 복원)"><span class="tool-icon">🧽</span><span class="tool-name">지우개</span></button>
+                            <button class="tool-btn" data-tool="mosaic" title="모자이크"><span class="tool-icon">🔲</span><span class="tool-name">모자이크</span></button>
+                            <button class="tool-btn" data-tool="text" title="텍스트"><span class="tool-icon">🔤</span><span class="tool-name">텍스트</span></button>
+                            <button class="tool-btn" data-tool="rect" title="사각형 채우기"><span class="tool-icon">⬛</span><span class="tool-name">사각형</span></button>
+                            <button class="tool-btn" data-tool="crop" title="자르기"><span class="tool-icon">✂️</span><span class="tool-name">자르기</span></button>
+                            <button class="tool-btn" data-tool="transform" title="회전 / 반전 / 크기 변경"><span class="tool-icon">🔄</span><span class="tool-name">회전·크기</span></button>
+                            <button class="tool-btn" data-tool="wand" title="배경 투명화 (마법봉)"><span class="tool-icon">🪄</span><span class="tool-name">배경투명</span></button>
+                            <button class="tool-btn" data-tool="smart" title="스마트 배경 지우개 (머리카락용)"><span class="tool-icon">🧹</span><span class="tool-name">스마트지우개</span></button>
+                        </div>
                     </div>
-                    <div class="tool-divider"></div>
-                    <div class="tool-section">
+                    <div class="tool-section" id="optionsSection">
                         <div class="tool-section-title">옵션</div>
                         <div class="option-group">
-                            <div class="option-row" id="sizeRow"><span class="option-label">크기</span><input type="range" class="option-slider" id="toolSize" min="1" max="100" value="30"><input type="number" class="option-input" id="toolSizeInput" min="1" max="100" value="30"></div>
-                            <div class="option-row" id="toleranceRow" style="display: none;"><span class="option-label">감도</span><input type="range" class="option-slider" id="toleranceSlider" min="5" max="150" value="60"><input type="number" class="option-input" id="toleranceInput" min="5" max="150" value="60"></div>
-                            <div class="option-row" id="mosaicStyleRow" style="display: none;"><span class="option-label">종류</span><div style="display:flex;gap:4px;flex:1;"><button type="button" class="mosaic-style-btn active" data-mstyle="pixel">픽셀</button><button type="button" class="mosaic-style-btn" data-mstyle="blur">블러</button><button type="button" class="mosaic-style-btn" data-mstyle="glass">유리</button></div></div>
-                            <div class="option-row" id="mosaicShapeRow" style="display: none;"><span class="option-label">모양</span><div style="display:flex;gap:4px;flex:1;"><button type="button" class="mosaic-shape-btn active" data-mshape="circle">● 동그라미</button><button type="button" class="mosaic-shape-btn" data-mshape="square">■ 네모</button></div></div>
-                            <div class="option-row" id="mosaicBlockRow" style="display: none;"><span class="option-label">강도</span><input type="range" class="option-slider" id="mosaicBlockSlider" min="2" max="40" value="10"><input type="number" class="option-input" id="mosaicBlockInput" min="2" max="40" value="10"></div>
-                            <div class="color-row" id="colorRow"><span class="option-label">색상</span><input type="color" class="color-picker" id="toolColor" value="#000000"></div>
-                            <div class="crop-options" id="cropOptions">
-                                <div class="crop-info">현재: <span id="cropCurrentSize">0 x 0</span></div>
-                                <div class="crop-input-row">
-                                    <label>X</label><input type="number" class="crop-input" id="cropX" value="0">
-                                    <label>Y</label><input type="number" class="crop-input" id="cropY" value="0">
-                                </div>
-                                <div class="crop-input-row">
-                                    <label>W</label><input type="number" class="crop-input" id="cropW" value="100">
-                                    <label>H</label><input type="number" class="crop-input" id="cropH" value="100">
-                                </div>
-                                <div class="crop-btn-row">
-                                    <button class="crop-apply-btn" id="cropApplyBtn">자르기</button>
-                                    <button class="crop-apply-btn all" id="cropApplyAllBtn">전체적용</button>
-                                </div>
+                            <div class="option-row" data-for="mosaic"><span class="option-label">방식</span><div class="seg" data-seg="mosaicMode"><button type="button" class="seg-btn active" data-val="brush">🖌 문지르기</button><button type="button" class="seg-btn" data-val="box">⬚ 박스</button></div></div>
+                            <div class="option-row" data-for="mosaic"><span class="option-label">종류</span><div class="seg" data-seg="mosaicStyle"><button type="button" class="seg-btn active" data-val="pixel">픽셀</button><button type="button" class="seg-btn" data-val="blur">블러</button><button type="button" class="seg-btn" data-val="glass">유리</button></div></div>
+                            <div class="option-row" data-for="mosaic" data-mosaic="brush"><span class="option-label">모양</span><div class="seg" data-seg="mosaicShape"><button type="button" class="seg-btn active" data-val="circle">● 동그라미</button><button type="button" class="seg-btn" data-val="square">■ 네모</button></div></div>
+                            <div class="option-row" data-for="mosaic"><span class="option-label">강도</span><input type="range" class="option-slider" id="mosaicBlockSlider" min="2" max="60" value="12"><input type="number" class="option-input" id="mosaicBlockInput" min="2" max="60" value="12"></div>
+                            <div class="option-row" data-for="brush eraser mosaic smart" data-mosaic="brush"><span class="option-label">크기</span><input type="range" class="option-slider" id="toolSize" min="1" max="300" value="30"><input type="number" class="option-input" id="toolSizeInput" min="1" max="300" value="30"></div>
+                            <div class="option-row" data-for="wand smart"><span class="option-label">감도</span><input type="range" class="option-slider" id="toleranceSlider" min="5" max="150" value="60"><input type="number" class="option-input" id="toleranceInput" min="5" max="150" value="60"></div>
+                            <div class="option-row col" data-for="text"><textarea class="text-input-area" id="textInput" placeholder="넣을 글자 입력 (줄바꿈 가능)"></textarea></div>
+                            <div class="option-row" data-for="text"><span class="option-label">크기</span><input type="range" class="option-slider" id="textSize" min="8" max="400" value="48"><input type="number" class="option-input" id="textSizeInput" min="8" max="400" value="48"></div>
+                            <div class="option-row" data-for="text"><span class="option-label">스타일</span><div class="seg"><button type="button" class="seg-btn active" id="textBoldBtn">굵게</button><button type="button" class="seg-btn active" id="textOutlineBtn">외곽선</button><button type="button" class="seg-btn" id="textShadowBtn">그림자</button></div></div>
+                            <div class="option-row" data-for="brush rect text"><span class="option-label">색상</span><input type="color" class="color-picker" id="toolColor" value="#000000"><div class="color-swatches"><button type="button" class="color-swatch" data-color="#000000" style="background:#000"></button><button type="button" class="color-swatch" data-color="#ffffff" style="background:#fff"></button><button type="button" class="color-swatch" data-color="#ff3b5c" style="background:#ff3b5c"></button></div></div>
+                            <div class="act-row" data-for="text"><button type="button" class="act-btn" id="textCommitBtn">✓ 넣기</button><button type="button" class="act-btn ghost" id="textCancelBtn">지우기</button></div>
+                            <div class="option-row col" data-for="crop"><span class="option-label">비율</span><div class="seg" data-seg="cropRatio"><button type="button" class="seg-btn active" data-val="free">자유</button><button type="button" class="seg-btn" data-val="orig">원본</button><button type="button" class="seg-btn" data-val="1">1:1</button><button type="button" class="seg-btn" data-val="0.75">3:4</button><button type="button" class="seg-btn" data-val="1.3333">4:3</button><button type="button" class="seg-btn" data-val="0.5625">9:16</button><button type="button" class="seg-btn" data-val="1.7778">16:9</button></div></div>
+                            <div class="num-row" data-for="crop"><label>X</label><input type="number" class="option-input" id="cropX" value="0"><label>Y</label><input type="number" class="option-input" id="cropY" value="0"></div>
+                            <div class="num-row" data-for="crop"><label>W</label><input type="number" class="option-input" id="cropW" value="100"><label>H</label><input type="number" class="option-input" id="cropH" value="100"></div>
+                            <div class="act-row" data-for="crop"><button type="button" class="act-btn" id="cropApplyBtn">✂️ 자르기</button><button type="button" class="act-btn alt" id="cropApplyAllBtn" title="같은 위치·크기로 다른 이미지도 모두 자르기">전체적용</button><button type="button" class="act-btn ghost" id="cropResetBtn" title="전체 선택으로 되돌리기">↺</button></div>
+                            <div class="option-row col" data-for="transform"><span class="option-label">회전 · 반전</span><div class="act-row"><button type="button" class="act-btn ghost big" id="rotLeftBtn" title="왼쪽으로 90°">⟲</button><button type="button" class="act-btn ghost big" id="rotRightBtn" title="오른쪽으로 90°">⟳</button><button type="button" class="act-btn ghost big" id="flipHBtn" title="좌우 반전">⇋</button><button type="button" class="act-btn ghost big" id="flipVBtn" title="상하 반전">⇅</button></div></div>
+                            <div class="option-row col" data-for="transform"><span class="option-label">크기 변경 (현재 <span id="resizeCurrent">0 x 0</span>)</span>
+                                <div class="num-row"><label>W</label><input type="number" class="option-input" id="resizeW" min="1" value="100"><button type="button" class="seg-btn active lock-btn" id="resizeLockBtn" title="비율 고정">🔗</button><label>H</label><input type="number" class="option-input" id="resizeH" min="1" value="100"></div>
+                                <div class="seg"><button type="button" class="seg-btn" data-pct="25">25%</button><button type="button" class="seg-btn" data-pct="50">50%</button><button type="button" class="seg-btn" data-pct="75">75%</button><button type="button" class="seg-btn" data-pct="150">150%</button><button type="button" class="seg-btn" data-pct="200">200%</button></div>
                             </div>
+                            <div class="act-row" data-for="transform"><button type="button" class="act-btn" id="resizeApplyBtn">크기 변경</button><button type="button" class="act-btn alt" id="resizeApplyAllBtn" title="같은 비율(%)로 다른 이미지도 모두 크기 변경">전체적용</button></div>
+                            <div class="option-hint" id="toolHint"></div>
                         </div>
                     </div>
                 </div>
-                <div class="editor-canvas-area">
-                    <button class="img-nav-btn prev" id="imgPrevBtn">◀</button>
-                    <canvas class="editor-canvas" id="editorCanvas"></canvas>
-                    <div class="crop-overlay" id="cropOverlay">
+                <div class="editor-canvas-area" id="canvasArea">
+                    <div class="canvas-stage" id="canvasStage">
+                        <canvas class="editor-canvas" id="editorCanvas"></canvas>
+                        <canvas class="preview-canvas" id="previewCanvas"></canvas>
                         <div class="crop-box" id="cropBox">
-                            <div class="crop-handle nw" data-handle="nw"></div>
-                            <div class="crop-handle n" data-handle="n"></div>
-                            <div class="crop-handle ne" data-handle="ne"></div>
-                            <div class="crop-handle w" data-handle="w"></div>
-                            <div class="crop-handle e" data-handle="e"></div>
-                            <div class="crop-handle sw" data-handle="sw"></div>
-                            <div class="crop-handle s" data-handle="s"></div>
-                            <div class="crop-handle se" data-handle="se"></div>
+                            <div class="crop-handle nw" data-handle="nw"></div><div class="crop-handle n" data-handle="n"></div><div class="crop-handle ne" data-handle="ne"></div>
+                            <div class="crop-handle w" data-handle="w"></div><div class="crop-handle e" data-handle="e"></div>
+                            <div class="crop-handle sw" data-handle="sw"></div><div class="crop-handle s" data-handle="s"></div><div class="crop-handle se" data-handle="se"></div>
                             <div class="crop-size-label" id="cropSizeLabel">100 x 100</div>
                         </div>
                     </div>
-                    <button class="img-nav-btn next" id="imgNextBtn">▶</button>
+                    <button class="img-nav-btn prev" id="imgPrevBtn" title="이전 이미지">◀</button>
+                    <button class="img-nav-btn next" id="imgNextBtn" title="다음 이미지">▶</button>
+                    <div class="zoom-badge" id="zoomBadge">100%</div>
                 </div>
             </div>
             <div class="editor-footer">
-                <div class="editor-shortcut"><kbd>Ctrl</kbd>+<kbd>Z</kbd> 되돌리기 • <kbd>Ctrl</kbd>+<kbd>Y</kbd> 다시하기 • <kbd>ESC</kbd> 닫기</div>
+                <div class="editor-shortcut"><kbd>Ctrl</kbd>+<kbd>Z</kbd> 되돌리기 • <kbd>Ctrl</kbd>+<kbd>Y</kbd> 다시하기 • <kbd>휠</kbd> 확대 • <kbd>Space</kbd>+드래그 이동 • <kbd>ESC</kbd> 닫기</div>
                 <div class="editor-buttons">
                     <button class="editor-btn secondary" id="editorCancel">취소</button>
                     <button class="editor-btn primary" id="editorSave">적용</button>
@@ -560,7 +606,7 @@
         modalConfirm.addEventListener('click', () => { if (pendingDeleteAction === 'selected') { Array.from(selectedIndices).sort((a, b) => b - a).forEach(idx => { URL.revokeObjectURL(filePreviews[idx]); selectedFiles.splice(idx, 1); filePreviews.splice(idx, 1); imageTags.splice(idx, 1); }); selectedIndices.clear(); if (selectedFiles.length === 0) qualitySection.classList.remove('active'); } modalOverlay.classList.remove('active'); pendingDeleteAction = null; updateUI(); });
 
         function handleFiles(files) { if (!files.length) return; files.forEach(file => { selectedFiles.push(file); filePreviews.push(URL.createObjectURL(file)); imageTags.push(''); }); updateUI(); fileInput.value = ''; }
-        function updateUI() { const hasFiles = selectedFiles.length > 0; if (!hasFiles) { baseFilenameInput.value = ''; baseFilenameInput.classList.remove('disabled'); document.getElementById('keepOriginalName').checked = false; originalOrder = null; tagSortBtn.textContent = '📑 태그별 정렬'; } filenameSection.classList.toggle('active', hasFiles); formatSection.classList.toggle('active', hasFiles); toggleSection.classList.toggle('active', hasFiles); processBtn.classList.toggle('active', hasFiles); previewPanel.classList.toggle('active', hasFiles); fileCountBadge.textContent = selectedFiles.length + '개'; updateImageGrid(); updateSelectionUI(); hideStatus(); }
+        function updateUI() { const hasFiles = selectedFiles.length > 0; if (!hasFiles) { baseFilenameInput.value = ''; baseFilenameInput.classList.remove('disabled'); document.getElementById('keepOriginalName').checked = false; originalOrder = null; tagSortBtn.textContent = '📑 태그별 정렬'; } filenameSection.classList.toggle('active', hasFiles); formatSection.classList.toggle('active', hasFiles); toggleSection.classList.toggle('active', hasFiles); processBtn.classList.toggle('active', hasFiles); document.getElementById('zipRow').style.display = hasFiles ? 'flex' : 'none'; previewPanel.classList.toggle('active', hasFiles); fileCountBadge.textContent = selectedFiles.length + '개'; updateImageGrid(); updateSelectionUI(); hideStatus(); }
         function updateSelectionUI() { const count = selectedIndices.size; selectedCountBadge.textContent = count + '개'; deselectAllBtn.disabled = count === 0; deleteSelectedBtn.disabled = count === 0; tagBtn.disabled = count === 0; tagSortBtn.disabled = selectedFiles.length === 0; selectAllBtn.textContent = count === selectedFiles.length && selectedFiles.length > 0 ? '전체 해제' : '전체 선택'; }
 
         
@@ -576,6 +622,7 @@
             }
             const baseName = baseFilenameInput.value.trim();
             const tag = imageTags[idx] || '';
+            if (randomEachToggle.checked) return randomIdFor(selectedFiles[idx]) + (tag ? '_' + tag : '') + '.' + format;
             
             let sameTagIndices = [];
             if (tag) {
@@ -619,7 +666,7 @@
                 const hasMeta = await checkMetadata(file);
                 let outputName = generateOutputName(i, format);
                 const metaBadge = hasMeta ? '<span class="meta-badge has-meta">메타O</span>' : '<span class="meta-badge no-meta">메타X</span>';
-                html += `<div class="image-item ${selectedIndices.has(i) ? 'selected' : ''}" data-index="${i}" draggable="true"><img class="image-thumb" src="${filePreviews[i]}" alt=""><div class="image-order">${i + 1}</div><div class="image-checkbox">✓</div><button class="image-download-btn" data-idx="${i}" title="개별 다운로드">⬇</button><div class="image-info"><div class="image-name" title="${file.name}">${file.name}</div><div class="image-size">${formatSize(file.size)} ${metaBadge}</div><div class="image-output">→ ${outputName}</div></div></div>`;
+                html += `<div class="image-item ${selectedIndices.has(i) ? 'selected' : ''}" data-index="${i}" draggable="true"><img class="image-thumb" src="${filePreviews[i]}" alt=""><div class="image-order">${i + 1}</div><div class="image-checkbox">✓</div><button class="image-edit-btn" data-idx="${i}" title="편집">✏️</button><button class="image-download-btn" data-idx="${i}" title="개별 다운로드">⬇</button><div class="image-info"><div class="image-name" title="${file.name}">${file.name}</div><div class="image-size">${formatSize(file.size)} ${metaBadge}</div><div class="image-output">→ ${outputName}</div></div></div>`;
             }
             imageGrid.innerHTML = html;
             bindImageEvents();
@@ -630,7 +677,7 @@
                 const idx = parseInt(item.dataset.index);
                 item.addEventListener('dblclick', (e) => { e.preventDefault(); openEditor(idx); });
                 item.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('image-download-btn')) return;
+                    if (e.target.closest('.image-download-btn, .image-edit-btn')) return;
                     if (e.shiftKey && lastClickedIndex !== null) { const start = Math.min(lastClickedIndex, idx), end = Math.max(lastClickedIndex, idx); for (let i = start; i <= end; i++) selectedIndices.add(i); }
                     else { if (selectedIndices.has(idx)) selectedIndices.delete(idx); else selectedIndices.add(idx); lastClickedIndex = idx; }
                     updateImageGrid(); updateSelectionUI();
@@ -658,6 +705,7 @@
                 });
                 item.addEventListener('dragend', () => { isDraggingItems = false; dropTargetIdx = null; dropPosition = null; document.querySelectorAll('.image-item').forEach(el => el.classList.remove('dragging', 'drop-before', 'drop-after')); });
             });
+            document.querySelectorAll('.image-edit-btn').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); openEditor(parseInt(btn.dataset.idx)); }));
             document.querySelectorAll('.image-download-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     e.stopPropagation();
@@ -726,207 +774,256 @@
 
         function stripWebPMetadata(arrayBuffer) { const view = new DataView(arrayBuffer), uint8 = new Uint8Array(arrayBuffer); if (String.fromCharCode(uint8[0],uint8[1],uint8[2],uint8[3]) !== 'RIFF' || String.fromCharCode(uint8[8],uint8[9],uint8[10],uint8[11]) !== 'WEBP') throw new Error('Invalid WebP'); const metadataChunks = ['EXIF','XMP ','ICCP'], chunks = []; let offset = 12, vp8xIdx = -1; while (offset < arrayBuffer.byteLength) { if (offset + 8 > arrayBuffer.byteLength) break; const fourCC = String.fromCharCode(uint8[offset],uint8[offset+1],uint8[offset+2],uint8[offset+3]), chunkSize = view.getUint32(offset + 4, true), paddedSize = chunkSize + (chunkSize % 2), totalSize = 8 + paddedSize; if (fourCC === 'VP8X') vp8xIdx = chunks.length; if (!metadataChunks.includes(fourCC)) chunks.push(uint8.slice(offset, offset + totalSize)); offset += totalSize; } if (vp8xIdx >= 0 && chunks[vp8xIdx].length >= 18) chunks[vp8xIdx][8] &= ~(0x20 | 0x04 | 0x08); const totalSize = chunks.reduce((s, c) => s + c.length, 0), newBuffer = new ArrayBuffer(12 + totalSize), newView = new DataView(newBuffer), newUint8 = new Uint8Array(newBuffer); newUint8.set([0x52,0x49,0x46,0x46], 0); newView.setUint32(4, 4 + totalSize, true); newUint8.set([0x57,0x45,0x42,0x50], 8); let wo = 12; for (const chunk of chunks) { newUint8.set(chunk, wo); wo += chunk.length; } return newBuffer; }
 
-        processBtn.addEventListener('click', async () => { if (!selectedFiles.length) return; processBtn.disabled = true; hideStatus(); try { const format = document.querySelector('input[name="format"]:checked').value, quality = parseInt(qualityInput.value) / 100, shouldRemoveMetadata = removeMetadataToggle.checked; const total = selectedFiles.length; for (let i = 0; i < total; i++) { processBtn.textContent = `처리 중... (${i + 1}/${total})`; let outputName = generateOutputName(i, format); await processAndDownload(selectedFiles[i], outputName, format, quality, shouldRemoveMetadata); if (i < total - 1) await sleep(DOWNLOAD_DELAY); } showStatus(`✓ ${total}개 파일 순서대로 처리 완료!`, 'success'); } catch (err) { showStatus(`✗ 오류: ${err.message}`, 'error'); } processBtn.disabled = false; processBtn.textContent = '처리 및 다운로드'; });
+        processBtn.addEventListener('click', async () => { if (!selectedFiles.length) return; processBtn.disabled = true; hideStatus(); try { const format = document.querySelector('input[name="format"]:checked').value, quality = parseInt(qualityInput.value) / 100, shouldRemoveMetadata = removeMetadataToggle.checked; const total = selectedFiles.length; if (zipToggle.checked) { const entries = [], used = new Set(); for (let i = 0; i < total; i++) { processBtn.textContent = `처리 중... (${i + 1}/${total})`; let name = generateOutputName(i, format); const dot = name.lastIndexOf('.'), stem = name.slice(0, dot), ext = name.slice(dot); for (let n = 2; used.has(name); n++) name = `${stem} (${n})${ext}`; used.add(name); entries.push({ name, blob: await processToBlob(selectedFiles[i], format, quality, shouldRemoveMetadata) }); } processBtn.textContent = 'ZIP 만드는 중...'; const zipBase = (!randomEachToggle.checked && !keepOriginalCheckbox.checked && baseFilenameInput.value.trim()) || 'images'; downloadBlob(await makeZip(entries), zipBase + '.zip'); showStatus(`✓ ${total}개 파일을 ZIP으로 저장했어요!`, 'success'); } else { for (let i = 0; i < total; i++) { processBtn.textContent = `처리 중... (${i + 1}/${total})`; let outputName = generateOutputName(i, format); await processAndDownload(selectedFiles[i], outputName, format, quality, shouldRemoveMetadata); if (i < total - 1) await sleep(DOWNLOAD_DELAY); } showStatus(`✓ ${total}개 파일 순서대로 처리 완료!`, 'success'); } } catch (err) { showStatus(`✗ 오류: ${err.message}`, 'error'); } processBtn.disabled = false; processBtn.textContent = '처리 및 다운로드'; });
 
-        async function processAndDownload(file, filename, format, quality, removeMetadata) { const arrayBuffer = await file.arrayBuffer(); let cleanedBuffer = arrayBuffer; if (removeMetadata) { if (file.type === 'image/png') cleanedBuffer = stripPNGMetadata(arrayBuffer); else if (file.type === 'image/jpeg') cleanedBuffer = stripJPEGMetadata(arrayBuffer); else if (file.type === 'image/webp') cleanedBuffer = stripWebPMetadata(arrayBuffer); } const blob = new Blob([cleanedBuffer], { type: file.type }), img = await createImageBitmap(blob), canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0); if (removeMetadata) { let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height); imageData = scrambleAlphaLSB(imageData); ctx.putImageData(imageData, 0, 0); } const mimeTypes = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp' }, outputBlob = await new Promise(r => canvas.toBlob(r, mimeTypes[format], quality)), link = document.createElement('a'); const url = URL.createObjectURL(outputBlob); link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 15000); }
+        async function processToBlob(file, format, quality, removeMetadata) { const arrayBuffer = await file.arrayBuffer(); let cleanedBuffer = arrayBuffer; if (removeMetadata) { if (file.type === 'image/png') cleanedBuffer = stripPNGMetadata(arrayBuffer); else if (file.type === 'image/jpeg') cleanedBuffer = stripJPEGMetadata(arrayBuffer); else if (file.type === 'image/webp') cleanedBuffer = stripWebPMetadata(arrayBuffer); } const blob = new Blob([cleanedBuffer], { type: file.type }), img = await createImageBitmap(blob), canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0); if (removeMetadata) { let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height); imageData = scrambleAlphaLSB(imageData); ctx.putImageData(imageData, 0, 0); } const mimeTypes = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp' }; return await new Promise(r => canvas.toBlob(r, mimeTypes[format], quality)); }
+        function downloadBlob(blob, filename) { const link = document.createElement('a'), url = URL.createObjectURL(blob); link.href = url; link.download = filename; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 15000); }
+        async function processAndDownload(file, filename, format, quality, removeMetadata) { downloadBlob(await processToBlob(file, format, quality, removeMetadata), filename); }
 
         function showStatus(msg, type) { status.textContent = msg; status.className = `status ${type}`; }
         function hideStatus() { status.className = 'status'; }
-        // 에디터
-        const editorOverlay = document.getElementById('editorOverlay'), editorCanvas = document.getElementById('editorCanvas'), editorClose = document.getElementById('editorClose'), editorCancel = document.getElementById('editorCancel'), editorSave = document.getElementById('editorSave'), toolSize = document.getElementById('toolSize'), toolSizeInput = document.getElementById('toolSizeInput'), toolColor = document.getElementById('toolColor'), colorRow = document.getElementById('colorRow'), sizeRow = document.getElementById('sizeRow'), undoBtn = document.getElementById('undoBtn'), redoBtn = document.getElementById('redoBtn'), imgPrevBtn = document.getElementById('imgPrevBtn'), imgNextBtn = document.getElementById('imgNextBtn'), brushCursor = document.getElementById('brushCursor'), saveModal = document.getElementById('saveModal'), saveModalDiscard = document.getElementById('saveModalDiscard'), saveModalCancel = document.getElementById('saveModalCancel'), saveModalSave = document.getElementById('saveModalSave'), editorCtx = editorCanvas.getContext('2d');
-        const cropOverlay = document.getElementById('cropOverlay'), cropBox = document.getElementById('cropBox'), cropOptions = document.getElementById('cropOptions'), cropW = document.getElementById('cropW'), cropH = document.getElementById('cropH'), cropApplyBtn = document.getElementById('cropApplyBtn'), cropApplyAllBtn = document.getElementById('cropApplyAllBtn'), cropSizeLabel = document.getElementById('cropSizeLabel'), cropCurrentSize = document.getElementById('cropCurrentSize');
-
-        let editingIndex = null, originalImage = null, originalCanvas = null, currentTool = 'brush-color', isDrawing = false, lastX = 0, lastY = 0, startX = 0, startY = 0, historyStack = [], redoStack = [], tempCanvas = null, hasChanges = false, pendingAction = null;
-        let mosaicStyle = 'pixel', mosaicBlock = 10, mosaicShape = 'circle';
-        // --- 프로버전 확대/축소 및 화면이동 변수 시작 ---
-        let zoomLevel = 1;
-        let offsetX = 0;
-                let offsetY = 0;
-        let isPanning = false;
-        let startPanX = 0;
-        let startPanY = 0;
-        let isSpacePressed = false;
-
-        function applyZoomTransform() {
-        editorCanvas.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${zoomLevel})`;
-        }
-        // --- 프로버전 확대/축소 및 화면이동 변수 끝 ---
-        let cropState = { x: 0, y: 0, w: 100, h: 100 }, isCropping = false, cropAction = null, cropStartX = 0, cropStartY = 0, cropStartState = null, cropMode = 'size';
-
-        const canvasArea = document.querySelector('.editor-canvas-area');
-        canvasArea.addEventListener('mouseenter', (e) => { if (currentTool !== 'rect' && currentTool !== 'crop') { brushCursor.classList.add('active'); updateBrushCursor(e); } });
-        canvasArea.addEventListener('mousemove', updateBrushCursor);
-        canvasArea.addEventListener('mouseleave', () => brushCursor.classList.remove('active'));
-
-        function updateBrushCursor(e) { if (currentTool === 'rect' || currentTool === 'crop' || currentTool === 'chromakey') { brushCursor.classList.remove('active'); return; } const size = parseInt(toolSize.value) * zoomLevel; brushCursor.style.width = size + 'px'; brushCursor.style.height = size + 'px'; brushCursor.style.left = e.clientX + 'px'; brushCursor.style.top = e.clientY + 'px'; brushCursor.classList.toggle('mosaic', currentTool === 'brush-mosaic'); brushCursor.classList.toggle('eraser', currentTool === 'eraser'); }
-
-        toolSize.addEventListener('input', () => toolSizeInput.value = toolSize.value);
-        toolSizeInput.addEventListener('input', () => { let val = Math.max(1, Math.min(100, parseInt(toolSizeInput.value) || 1)); toolSize.value = val; });
-        toolSizeInput.addEventListener('blur', () => { let val = Math.max(1, Math.min(100, parseInt(toolSizeInput.value) || 30)); toolSizeInput.value = val; toolSize.value = val; });
-
-        document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentTool = btn.dataset.tool; const isCrop = currentTool === 'crop'; const isChroma = currentTool === 'chromakey'; const isSmart = currentTool === 'smart-eraser'; const isMosaic = currentTool === 'brush-mosaic'; colorRow.style.display = (currentTool === 'brush-mosaic' || currentTool === 'eraser' || isCrop || isChroma || isSmart) ? 'none' : 'flex'; sizeRow.style.display = (isCrop || isChroma) ? 'none' : 'flex'; document.getElementById('toleranceRow').style.display = (isChroma || isSmart) ? 'flex' : 'none'; document.getElementById('mosaicStyleRow').style.display = isMosaic ? 'flex' : 'none'; document.getElementById('mosaicShapeRow').style.display = isMosaic ? 'flex' : 'none'; document.getElementById('mosaicBlockRow').style.display = isMosaic ? 'flex' : 'none'; cropOptions.classList.toggle('active', isCrop); if (currentTool === 'rect' || isCrop || isChroma) brushCursor.classList.remove('active'); if (isCrop && cropCurrentSize && originalImage) { cropCurrentSize.textContent = originalImage.width + ' x ' + originalImage.height; cropW.value = originalImage.width; cropH.value = originalImage.height; } }); });
-        document.getElementById('toleranceSlider').addEventListener('input', (e) => document.getElementById('toleranceInput').value = e.target.value);
-        document.getElementById('toleranceInput').addEventListener('input', (e) => { let val = Math.max(5, Math.min(150, parseInt(e.target.value) || 60)); document.getElementById('toleranceSlider').value = val; e.target.value = val; });
-        document.querySelectorAll('.mosaic-style-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.mosaic-style-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); mosaicStyle = btn.dataset.mstyle; }); });
+        // ===== 에디터 =====
+        // 마우스 / 터치 / 펜을 모두 Pointer Events 하나로 처리.
+        // 화면 구조: canvasArea(고정) > canvasStage(화면맞춤 크기 + 확대/이동 transform) > [editorCanvas, previewCanvas, cropBox]
+        const editorOverlay = document.getElementById('editorOverlay'), editorCanvas = document.getElementById('editorCanvas'), editorCtx = editorCanvas.getContext('2d');
+        const previewCanvas = document.getElementById('previewCanvas'), previewCtx = previewCanvas.getContext('2d');
+        const canvasArea = document.getElementById('canvasArea'), canvasStage = document.getElementById('canvasStage'), zoomBadge = document.getElementById('zoomBadge'), editorImgInfo = document.getElementById('editorImgInfo');
+        const editorClose = document.getElementById('editorClose'), editorCancel = document.getElementById('editorCancel'), editorSave = document.getElementById('editorSave');
+        const undoBtn = document.getElementById('undoBtn'), redoBtn = document.getElementById('redoBtn'), fitBtn = document.getElementById('fitBtn'), imgPrevBtn = document.getElementById('imgPrevBtn'), imgNextBtn = document.getElementById('imgNextBtn');
+        const toolSize = document.getElementById('toolSize'), toolSizeInput = document.getElementById('toolSizeInput'), toolColor = document.getElementById('toolColor'), toolHint = document.getElementById('toolHint');
+        const toleranceSlider = document.getElementById('toleranceSlider'), toleranceInput = document.getElementById('toleranceInput');
         const mosaicBlockSlider = document.getElementById('mosaicBlockSlider'), mosaicBlockInput = document.getElementById('mosaicBlockInput');
-        mosaicBlockSlider.addEventListener('input', () => { mosaicBlock = parseInt(mosaicBlockSlider.value); mosaicBlockInput.value = mosaicBlock; });
-        mosaicBlockInput.addEventListener('input', () => { let v = Math.max(2, Math.min(40, parseInt(mosaicBlockInput.value) || 10)); mosaicBlock = v; mosaicBlockSlider.value = v; });
-        mosaicBlockInput.addEventListener('blur', () => { let v = Math.max(2, Math.min(40, parseInt(mosaicBlockInput.value) || 10)); mosaicBlock = v; mosaicBlockInput.value = v; mosaicBlockSlider.value = v; });
-        document.querySelectorAll('.mosaic-shape-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.mosaic-shape-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); mosaicShape = btn.dataset.mshape; brushCursor.style.borderRadius = (mosaicShape === 'square') ? '4px' : '50%'; }); });
+        const brushCursor = document.getElementById('brushCursor');
+        const saveModal = document.getElementById('saveModal'), saveModalDiscard = document.getElementById('saveModalDiscard'), saveModalCancel = document.getElementById('saveModalCancel'), saveModalSave = document.getElementById('saveModalSave');
+        const cropBox = document.getElementById('cropBox'), cropSizeLabel = document.getElementById('cropSizeLabel'), cropX = document.getElementById('cropX'), cropY = document.getElementById('cropY'), cropW = document.getElementById('cropW'), cropH = document.getElementById('cropH');
+        const textInput = document.getElementById('textInput'), textSize = document.getElementById('textSize'), textSizeInput = document.getElementById('textSizeInput');
+        const textBoldBtn = document.getElementById('textBoldBtn'), textOutlineBtn = document.getElementById('textOutlineBtn'), textShadowBtn = document.getElementById('textShadowBtn');
+        const resizeW = document.getElementById('resizeW'), resizeH = document.getElementById('resizeH'), resizeLockBtn = document.getElementById('resizeLockBtn'), resizeCurrent = document.getElementById('resizeCurrent');
 
-        let isDraggingCrop = false, dragCropStartX = 0, dragCropStartY = 0, dragCropEndX = 0, dragCropEndY = 0;
-        let cropPreviewCanvas = null;
+        let editingIndex = null, originalImage = null, originalCanvas = null, currentTool = 'brush', hasChanges = false, pendingAction = null;
+        let edHistory = [], edRedo = [], edBusy = false;
+        let mosaicStyle = 'pixel', mosaicBlock = 12, mosaicShape = 'circle', mosaicMode = 'brush', mosaicLayer = null;
+        let zoomLevel = 1, panX = 0, panY = 0, fitScale = 1, stageLeft = 0, stageTop = 0;
+        let cropRect = { x: 0, y: 0, w: 0, h: 0 }, cropRatio = 'free';
+        let textState = null; // { x, y } 위치가 정해진 미리보기 텍스트
+        let smartTargetColor = null;
 
-        function drawCropPreview() {
-            if (!cropPreviewCanvas || !originalImage) return;
-            editorCtx.drawImage(cropPreviewCanvas, 0, 0);
-            const x1 = Math.min(dragCropStartX, dragCropEndX);
-            const y1 = Math.min(dragCropStartY, dragCropEndY);
-            const w = Math.abs(dragCropEndX - dragCropStartX);
-            const h = Math.abs(dragCropEndY - dragCropStartY);
-            
-            editorCtx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-            editorCtx.fillRect(0, 0, editorCanvas.width, y1);
-            editorCtx.fillRect(0, y1, x1, h);
-            editorCtx.fillRect(x1 + w, y1, editorCanvas.width - x1 - w, h);
-            editorCtx.fillRect(0, y1 + h, editorCanvas.width, editorCanvas.height - y1 - h);
-            
-            editorCtx.strokeStyle = '#ff6b96';
-            editorCtx.lineWidth = 2;
-            editorCtx.setLineDash([5, 5]);
-            editorCtx.strokeRect(x1, y1, w, h);
-            editorCtx.setLineDash([]);
-            
-            editorCtx.fillStyle = '#ff6b96';
-            editorCtx.fillRect(x1, y1 - 24, 80, 20);
-            editorCtx.fillStyle = 'white';
-            editorCtx.font = '12px Pretendard';
-            editorCtx.fillText(w + ' x ' + h, x1 + 5, y1 - 9);
-            
-            cropX.value = Math.max(0, x1);
-            cropY.value = Math.max(0, y1);
-            cropW.value = Math.max(0, w);
-            cropH.value = Math.max(0, h);
+        const TOOL_HINTS = {
+            brush: '드래그해서 그리기',
+            eraser: '문지른 곳을 <b>원본</b>으로 되돌려요',
+            mosaic: '<b>문지르기</b>: 문지른 곳만 모자이크<br><b>박스</b>: 드래그로 영역을 한 번에',
+            text: '글자를 입력하고 <b>이미지를 탭</b>하면 그 자리에 놓여요. 끌어서 옮긴 뒤 <b>넣기</b>',
+            rect: '드래그해서 사각형으로 채우기',
+            crop: '드래그로 영역 지정, <b>모서리·변</b>을 끌어 조절, 안쪽을 끌어 이동',
+            transform: '회전·반전은 바로 적용돼요. 크기는 숫자나 %를 고른 뒤 <b>크기 변경</b>',
+            wand: '지울 배경을 <b>탭</b>하세요. 이어진 비슷한 색이 투명해져요',
+            smart: '지울 배경색 위에서 시작해서 문지르세요 (머리카락 경계용)'
+        };
+        const VIEW_HINT = '<br><span class="touch-only">✌️ 두 손가락: 확대·이동</span><span class="mouse-only">휠: 확대 · Space/휠클릭 드래그: 이동</span>';
+
+        // ---------- 공용 캔버스 유틸 ----------
+        function makeCanvas(w, h) { const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); return c; }
+        function cloneCanvas(src) { const c = makeCanvas(src.width, src.height); c.getContext('2d').drawImage(src, 0, 0); return c; }
+        function canvasToBlob(c) { return new Promise(r => c.toBlob(r, 'image/png')); }
+        function blobToImage(blob) { return new Promise((res, rej) => { const url = URL.createObjectURL(blob), img = new Image(); img.onload = () => { URL.revokeObjectURL(url); res(img); }; img.onerror = (e) => { URL.revokeObjectURL(url); rej(e); }; img.src = url; }); }
+        function loadImage(src) { return new Promise((res, rej) => { const img = new Image(); img.onload = () => res(img); img.onerror = rej; img.src = src; }); }
+        // 회전(90° 단위)/반전
+        function rotateCanvas(src, dir) { const c = makeCanvas(src.height, src.width), x = c.getContext('2d'); x.translate(c.width / 2, c.height / 2); x.rotate(dir * Math.PI / 2); x.drawImage(src, -src.width / 2, -src.height / 2); return c; }
+        function flipCanvas(src, horizontal) { const c = makeCanvas(src.width, src.height), x = c.getContext('2d'); if (horizontal) { x.translate(c.width, 0); x.scale(-1, 1); } else { x.translate(0, c.height); x.scale(1, -1); } x.drawImage(src, 0, 0); return c; }
+        function cropCanvas(src, r) { const c = makeCanvas(r.w, r.h); c.getContext('2d').drawImage(src, r.x, r.y, r.w, r.h, 0, 0, r.w, r.h); return c; }
+        // 크기 변경: 크게 줄일 때는 절반씩 여러 번 줄여서 계단현상/뭉개짐 방지
+        function resampleCanvas(src, w, h) {
+            w = Math.max(1, Math.round(w)); h = Math.max(1, Math.round(h));
+            let cur = src;
+            while (cur.width / 2 >= w && cur.height / 2 >= h) { const half = makeCanvas(cur.width / 2, cur.height / 2), hx = half.getContext('2d'); hx.imageSmoothingEnabled = true; hx.imageSmoothingQuality = 'high'; hx.drawImage(cur, 0, 0, half.width, half.height); cur = half; }
+            const out = makeCanvas(w, h), ox = out.getContext('2d'); ox.imageSmoothingEnabled = true; ox.imageSmoothingQuality = 'high'; ox.drawImage(cur, 0, 0, w, h); return out;
+        }
+        // 편집 캔버스 + 원본(지우개용)에 같은 변형을 적용
+        function applyGeometry(fn) {
+            commitText(true);
+            const next = fn(editorCanvas);
+            originalCanvas = fn(originalCanvas);
+            editorCanvas.width = next.width; editorCanvas.height = next.height;
+            editorCtx.drawImage(next, 0, 0);
+            onCanvasSizeChanged();
+            pushHistory();
         }
 
-        let lastCropX = 0, lastCropY = 0;
-
-        function applyCrop(startX, startY, w, h) {
-            if (!originalImage) return;
-            lastCropX = startX;
-            lastCropY = startY;
-            const cropW_val = Math.min(w, editorCanvas.width - startX);
-            const cropH_val = Math.min(h, editorCanvas.height - startY);
-            if (cropW_val <= 0 || cropH_val <= 0) return;
-            
-            const imageData = editorCtx.getImageData(startX, startY, cropW_val, cropH_val);
-            editorCanvas.width = cropW_val;
-            editorCanvas.height = cropH_val;
-            editorCtx.putImageData(imageData, 0, 0);
-            
-            if (cropCurrentSize) cropCurrentSize.textContent = cropW_val + ' x ' + cropH_val;
-            cropX.value = startX;
-            cropY.value = startY;
-            cropW.value = cropW_val;
-            cropH.value = cropH_val;
-            saveHistory();
-            showToast('자르기 완료!');
+        // ---------- 실행취소 (PNG Blob으로 비동기 저장 → 메인 스레드 멈춤 없음, 메모리도 적게) ----------
+        function pushHistory(isInit = false) {
+            edHistory.push({ blob: canvasToBlob(editorCanvas), orig: originalCanvas });
+            if (edHistory.length > 40) edHistory.shift();
+            edRedo = [];
+            if (!isInit) hasChanges = true;
+            updateUndoRedoButtons();
         }
-
-        cropApplyBtn.addEventListener('click', () => {
-            const x = parseInt(cropX.value) || 0;
-            const y = parseInt(cropY.value) || 0;
-            const w = parseInt(cropW.value) || 100;
-            const h = parseInt(cropH.value) || 100;
-            applyCrop(x, y, w, h);
-        });
-
-        cropApplyAllBtn.addEventListener('click', async () => {
-            const useX = parseInt(cropX.value) || 0;
-            const useY = parseInt(cropY.value) || 0;
-            const targetW = parseInt(cropW.value) || 100;
-            const targetH = parseInt(cropH.value) || 100;
-            
-            for (let i = 0; i < selectedFiles.length; i++) {
-                if (i === editingIndex) continue;
-                const img = new Image();
-                await new Promise(r => { img.onload = r; img.src = filePreviews[i]; });
-                const startX = Math.max(0, Math.min(useX, img.width - targetW));
-                const startY = Math.max(0, Math.min(useY, img.height - targetH));
-                const cropW_val = Math.min(targetW, img.width - startX);
-                const cropH_val = Math.min(targetH, img.height - startY);
-                if (cropW_val <= 0 || cropH_val <= 0) continue;
-                const tcv = document.createElement('canvas');
-                tcv.width = cropW_val;
-                tcv.height = cropH_val;
-                tcv.getContext('2d').drawImage(img, startX, startY, cropW_val, cropH_val, 0, 0, cropW_val, cropH_val);
-                const blob = await new Promise(r => tcv.toBlob(r, 'image/png'));
-                const file = new File([blob], selectedFiles[i].name, { type: 'image/png' });
-                URL.revokeObjectURL(filePreviews[i]);
-                selectedFiles[i] = file;
-                filePreviews[i] = URL.createObjectURL(blob);
-            }
-            showToast(selectedFiles.length + '개 자르기 완료!');
-            updateImageGrid();
-        });
-
+        async function restoreEntry(entry) {
+            edBusy = true;
+            try {
+                const img = await blobToImage(await entry.blob);
+                const sizeChanged = img.width !== editorCanvas.width || img.height !== editorCanvas.height;
+                editorCanvas.width = img.width; editorCanvas.height = img.height;
+                editorCtx.clearRect(0, 0, img.width, img.height); editorCtx.drawImage(img, 0, 0);
+                originalCanvas = entry.orig;
+                if (sizeChanged) onCanvasSizeChanged(); else updateSizeInfo();
+            } finally { edBusy = false; updateUndoRedoButtons(); }
+        }
+        function undoEdit() { if (edBusy || edHistory.length <= 1) return; discardText(); edRedo.push(edHistory.pop()); restoreEntry(edHistory[edHistory.length - 1]); }
+        function redoEdit() { if (edBusy || !edRedo.length) return; discardText(); const e = edRedo.pop(); edHistory.push(e); restoreEntry(e); }
+        function updateUndoRedoButtons() { undoBtn.disabled = edHistory.length <= 1; redoBtn.disabled = edRedo.length === 0; }
         undoBtn.addEventListener('click', undoEdit);
         redoBtn.addEventListener('click', redoEdit);
-        function updateUndoRedoButtons() { undoBtn.disabled = historyStack.length <= 1; redoBtn.disabled = redoStack.length === 0; }
-        function updateNavButtons() { imgPrevBtn.disabled = editingIndex <= 0; imgNextBtn.disabled = editingIndex >= selectedFiles.length - 1; }
-        imgPrevBtn.addEventListener('click', () => { if (editingIndex > 0) tryNavigate(editingIndex - 1); });
-        imgNextBtn.addEventListener('click', () => { if (editingIndex < selectedFiles.length - 1) tryNavigate(editingIndex + 1); });
 
-        function tryNavigate(ni) { if (hasChanges) { pendingAction = { type: 'navigate', index: ni }; saveModal.classList.add('active'); } else switchToImage(ni); }
-        function tryClose() { if (hasChanges) { pendingAction = { type: 'close' }; saveModal.classList.add('active'); } else closeEditor(); }
-        saveModalDiscard.addEventListener('click', () => { saveModal.classList.remove('active'); if (pendingAction) { if (pendingAction.type === 'navigate') switchToImage(pendingAction.index); else if (pendingAction.type === 'close') closeEditor(); pendingAction = null; } });
-        saveModalCancel.addEventListener('click', () => { saveModal.classList.remove('active'); pendingAction = null; });
-        saveModalSave.addEventListener('click', async () => { saveModal.classList.remove('active'); await applyEdit(); if (pendingAction) { if (pendingAction.type === 'navigate') switchToImage(pendingAction.index); else if (pendingAction.type === 'close') closeEditor(); pendingAction = null; } });
+        // ---------- 화면 맞춤 / 확대 / 이동 ----------
+        function fitStage(resetView) {
+            const W = editorCanvas.width, H = editorCanvas.height, aw = canvasArea.clientWidth, ah = canvasArea.clientHeight;
+            if (!W || !H || !aw || !ah) return;
+            const margin = aw < 500 ? 12 : 28;
+            fitScale = Math.min((aw - margin * 2) / W, (ah - margin * 2) / H);
+            if (!(fitScale > 0)) fitScale = 1;
+            const sw = W * fitScale, sh = H * fitScale;
+            stageLeft = (aw - sw) / 2; stageTop = (ah - sh) / 2;
+            canvasStage.style.width = sw + 'px'; canvasStage.style.height = sh + 'px';
+            canvasStage.style.left = stageLeft + 'px'; canvasStage.style.top = stageTop + 'px';
+            if (resetView) { zoomLevel = 1; panX = 0; panY = 0; }
+            applyView();
+        }
+        function applyView() {
+            canvasStage.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+            canvasStage.style.setProperty('--z', zoomLevel);
+            zoomBadge.textContent = Math.round(fitScale * zoomLevel * 100) + '%';
+        }
+        function zoomAt(newZoom, clientX, clientY) {
+            newZoom = Math.min(30, Math.max(0.2, newZoom));
+            const ar = canvasArea.getBoundingClientRect();
+            const cx = ar.left + stageLeft + canvasStage.offsetWidth / 2, cy = ar.top + stageTop + canvasStage.offsetHeight / 2;
+            const ux = (clientX - cx - panX) / zoomLevel, uy = (clientY - cy - panY) / zoomLevel;
+            panX = clientX - cx - newZoom * ux; panY = clientY - cy - newZoom * uy; zoomLevel = newZoom;
+            applyView();
+        }
+        function onCanvasSizeChanged() {
+            previewCanvas.width = editorCanvas.width; previewCanvas.height = editorCanvas.height;
+            fitStage(true);
+            updateSizeInfo();
+            resetCropRect();
+            syncResizeInputs();
+        }
+        function updateSizeInfo() { editorImgInfo.textContent = editorCanvas.width + ' x ' + editorCanvas.height; resizeCurrent.textContent = editorCanvas.width + ' x ' + editorCanvas.height; }
+        fitBtn.addEventListener('click', () => fitStage(true));
+        new ResizeObserver(() => { if (editorOverlay.classList.contains('active')) { const z = zoomLevel, px = panX, py = panY; fitStage(false); zoomLevel = z; panX = px; panY = py; applyView(); } }).observe(canvasArea);
+        canvasArea.addEventListener('wheel', (e) => {
+            if (!editorOverlay.classList.contains('active')) return;
+            e.preventDefault();
+            const factor = Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0015));
+            zoomAt(zoomLevel * factor, e.clientX, e.clientY);
+        }, { passive: false });
 
-        function switchToImage(ni) { editingIndex = ni; historyStack = []; redoStack = []; hasChanges = false; const img = new Image(); img.onload = () => { originalImage = img; editorCanvas.width = img.width; editorCanvas.height = img.height; editorCtx.drawImage(img, 0, 0); originalCanvas = document.createElement('canvas'); originalCanvas.width = img.width; originalCanvas.height = img.height; originalCanvas.getContext('2d').drawImage(img, 0, 0); saveHistory(true); updateNavButtons(); if (currentTool === 'crop' && cropCurrentSize) { cropCurrentSize.textContent = img.width + ' x ' + img.height; } }; img.src = filePreviews[ni]; }
+        // 화면 좌표 → 이미지 픽셀 좌표 (transform 포함)
+        function toImg(e) { const r = editorCanvas.getBoundingClientRect(); return { x: (e.clientX - r.left) * editorCanvas.width / r.width, y: (e.clientY - r.top) * editorCanvas.height / r.height }; }
+        function screenPerImgPx() { return editorCanvas.getBoundingClientRect().width / editorCanvas.width; }
 
-        function openEditor(idx) { editingIndex = idx; historyStack = []; redoStack = []; hasChanges = false; const img = new Image(); img.onload = () => { originalImage = img; editorCanvas.width = img.width; editorCanvas.height = img.height; editorCtx.drawImage(img, 0, 0); originalCanvas = document.createElement('canvas'); originalCanvas.width = img.width; originalCanvas.height = img.height; originalCanvas.getContext('2d').drawImage(img, 0, 0); saveHistory(true); updateNavButtons(); editorOverlay.classList.add('active'); document.body.classList.add('editor-open'); if (currentTool === 'crop' && cropCurrentSize) { cropCurrentSize.textContent = img.width + ' x ' + img.height; } }; img.src = filePreviews[idx]; }
+        // ---------- 도구 선택 / 옵션 표시 ----------
+        function refreshOptions() {
+            document.querySelectorAll('#optionsSection [data-for]').forEach(row => {
+                const tools = row.dataset.for.split(' ');
+                let show = tools.includes(currentTool);
+                if (show && currentTool === 'mosaic' && row.dataset.mosaic && row.dataset.mosaic !== mosaicMode) show = false;
+                row.style.display = show ? '' : 'none';
+            });
+            toolHint.innerHTML = TOOL_HINTS[currentTool] + VIEW_HINT;
+            cropBox.classList.toggle('active', currentTool === 'crop');
+            canvasStage.classList.toggle('pan', currentTool === 'transform');
+            if (currentTool === 'crop') { if (!cropRect.w) resetCropRect(); renderCropBox(); }
+            if (currentTool === 'transform') syncResizeInputs();
+            updateCursorStyle();
+        }
+        function selectTool(tool) {
+            if (tool === currentTool) return;
+            if (currentTool === 'text') commitText(true);
+            currentTool = tool;
+            document.querySelectorAll('.tool-btn[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === tool));
+            refreshOptions();
+        }
+        document.querySelectorAll('.tool-btn[data-tool]').forEach(btn => btn.addEventListener('click', () => selectTool(btn.dataset.tool)));
+        // 세그먼트 버튼 (한 그룹에서 하나만 선택)
+        document.querySelectorAll('.seg[data-seg]').forEach(seg => {
+            seg.addEventListener('click', (e) => {
+                const b = e.target.closest('.seg-btn'); if (!b) return;
+                seg.querySelectorAll('.seg-btn').forEach(x => x.classList.toggle('active', x === b));
+                const v = b.dataset.val;
+                if (seg.dataset.seg === 'mosaicMode') { mosaicMode = v; refreshOptions(); }
+                else if (seg.dataset.seg === 'mosaicStyle') mosaicStyle = v;
+                else if (seg.dataset.seg === 'mosaicShape') { mosaicShape = v; updateCursorStyle(); }
+                else if (seg.dataset.seg === 'cropRatio') { cropRatio = v; applyRatioToCrop(); }
+            });
+        });
+        // 슬라이더 ↔ 숫자 입력 연결
+        function linkRange(slider, input, onChange) {
+            const clamp = v => Math.max(+slider.min, Math.min(+slider.max, v));
+            slider.addEventListener('input', () => { input.value = slider.value; onChange && onChange(+slider.value); });
+            input.addEventListener('input', () => { const v = parseInt(input.value); if (!isNaN(v)) { slider.value = clamp(v); onChange && onChange(clamp(v)); } });
+            input.addEventListener('blur', () => { const v = clamp(parseInt(input.value) || +slider.value); input.value = v; slider.value = v; onChange && onChange(v); });
+        }
+        linkRange(toolSize, toolSizeInput, () => flashSizePreview());
+        linkRange(toleranceSlider, toleranceInput);
+        linkRange(mosaicBlockSlider, mosaicBlockInput, v => { mosaicBlock = v; });
+        linkRange(textSize, textSizeInput, () => renderTextPreview());
+        document.querySelectorAll('.color-swatch').forEach(s => s.addEventListener('click', () => { toolColor.value = s.dataset.color; renderTextPreview(); }));
+        toolColor.addEventListener('input', renderTextPreview);
 
-        function saveHistory(isInit = false) { if (historyStack.length > 30) historyStack.shift(); historyStack.push(editorCanvas.toDataURL()); redoStack = []; updateUndoRedoButtons(); if (!isInit) hasChanges = true; }
-        function undoEdit() { if (historyStack.length <= 1) return; redoStack.push(historyStack.pop()); const img = new Image(); img.onload = () => { editorCanvas.width = img.width; editorCanvas.height = img.height; editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height); editorCtx.drawImage(img, 0, 0); if (cropCurrentSize) cropCurrentSize.textContent = img.width + ' x ' + img.height; updateUndoRedoButtons(); }; img.src = historyStack[historyStack.length - 1]; }
-        function redoEdit() { if (redoStack.length === 0) return; const rd = redoStack.pop(); historyStack.push(rd); const img = new Image(); img.onload = () => { editorCanvas.width = img.width; editorCanvas.height = img.height; editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height); editorCtx.drawImage(img, 0, 0); if (cropCurrentSize) cropCurrentSize.textContent = img.width + ' x ' + img.height; updateUndoRedoButtons(); }; img.src = rd; }
+        // ---------- 브러시 커서 ----------
+        function brushLikeTool() { return currentTool === 'brush' || currentTool === 'eraser' || currentTool === 'smart' || (currentTool === 'mosaic' && mosaicMode === 'brush'); }
+        function updateCursorStyle() {
+            brushCursor.classList.toggle('mosaic', currentTool === 'mosaic');
+            brushCursor.classList.toggle('eraser', currentTool === 'eraser' || currentTool === 'smart');
+            brushCursor.classList.toggle('square', currentTool === 'mosaic' && mosaicShape === 'square');
+            if (!brushLikeTool()) brushCursor.classList.remove('active');
+        }
+        function placeCursor(clientX, clientY) {
+            const size = parseInt(toolSize.value) * screenPerImgPx();
+            brushCursor.style.width = size + 'px'; brushCursor.style.height = size + 'px';
+            brushCursor.style.left = clientX + 'px'; brushCursor.style.top = clientY + 'px';
+        }
+        let sizeFlashTimer = null;
+        function flashSizePreview() { // 슬라이더 조절 시 캔버스 가운데에 크기 미리보기 (터치에서 유용)
+            if (!editorOverlay.classList.contains('active') || !brushLikeTool()) return;
+            const r = canvasArea.getBoundingClientRect();
+            placeCursor(r.left + r.width / 2, r.top + r.height / 2); brushCursor.classList.add('active');
+            clearTimeout(sizeFlashTimer); sizeFlashTimer = setTimeout(() => brushCursor.classList.remove('active'), 700);
+        }
+        canvasArea.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') brushCursor.classList.remove('active'); });
+
+        // ---------- 그리기 도구 ----------
+        function strokeWith(style, x1, y1, x2, y2, size) { editorCtx.save(); editorCtx.strokeStyle = style; editorCtx.lineWidth = size; editorCtx.lineCap = 'round'; editorCtx.lineJoin = 'round'; editorCtx.beginPath(); editorCtx.moveTo(x1, y1); editorCtx.lineTo(x2, y2); editorCtx.stroke(); editorCtx.restore(); }
+        function dotWith(style, x, y, size) { editorCtx.save(); editorCtx.fillStyle = style; editorCtx.beginPath(); editorCtx.arc(x, y, size / 2, 0, Math.PI * 2); editorCtx.fill(); editorCtx.restore(); }
 
         // 갤럭시식 모자이크: 스트로크 시작 시 "이미지 전체"를 한 번 모자이크한 레이어를 만들어 두고,
-        // 브러시로 문지르는 곳에만 그 레이어를 드러내는 방식. 블록 격자가 (0,0)에 고정되어 있어서
+        // 문지르는 곳에만 그 레이어를 패턴으로 칠함. 블록 격자가 (0,0)에 고정되어 있어서
         // 여러 번 문질러도 블록이 밀리거나 번지지 않고, 겹쳐 칠해도 결과가 항상 동일함.
-        let mosaicLayer = null;
         function buildMosaicLayer(block, style) {
             const W = editorCanvas.width, H = editorCanvas.height, factor = Math.max(2, block || 10);
-            const layer = document.createElement('canvas'); layer.width = W; layer.height = H;
-            const lctx = layer.getContext('2d');
+            const layer = makeCanvas(W, H), lctx = layer.getContext('2d');
             if (style === 'blur') {
                 if ('filter' in lctx) {
-                    // 가장자리가 투명하게 빠지지 않도록 원본을 한 번 깔고 그 위에 블러
-                    lctx.drawImage(editorCanvas, 0, 0);
+                    lctx.drawImage(editorCanvas, 0, 0); // 가장자리가 투명하게 빠지지 않도록 원본을 먼저 깔기
                     lctx.filter = `blur(${factor * 0.8}px)`;
                     lctx.drawImage(editorCanvas, 0, 0);
                     lctx.filter = 'none';
                 } else {
-                    const sw = Math.max(1, Math.round(W / factor)), sh = Math.max(1, Math.round(H / factor));
-                    const tmp = document.createElement('canvas'); tmp.width = sw; tmp.height = sh;
-                    const tctx = tmp.getContext('2d'); tctx.imageSmoothingEnabled = true; tctx.imageSmoothingQuality = 'high';
-                    tctx.drawImage(editorCanvas, 0, 0, sw, sh);
-                    lctx.imageSmoothingEnabled = true; lctx.imageSmoothingQuality = 'high';
-                    lctx.drawImage(tmp, 0, 0, W, H);
+                    const tmp = makeCanvas(W / factor, H / factor), tctx = tmp.getContext('2d');
+                    tctx.imageSmoothingEnabled = true; tctx.imageSmoothingQuality = 'high'; tctx.drawImage(editorCanvas, 0, 0, tmp.width, tmp.height);
+                    lctx.imageSmoothingEnabled = true; lctx.imageSmoothingQuality = 'high'; lctx.drawImage(tmp, 0, 0, W, H);
                 }
                 return layer;
             }
-            const srcData = editorCtx.getImageData(0, 0, W, H), s = srcData.data;
-            const out = lctx.createImageData(W, H), d = out.data;
+            const s = editorCtx.getImageData(0, 0, W, H).data, out = lctx.createImageData(W, H), d = out.data;
             if (style === 'glass') {
                 // 유리: 픽셀마다 고정된 무작위 오프셋 (한 번만 계산 → 문질러도 자글거림이 변하지 않음)
-                for (let y = 0; y < H; y++) {
-                    for (let x = 0; x < W; x++) {
-                        const nx = Math.min(W - 1, Math.max(0, x + Math.round((Math.random() - 0.5) * factor * 2)));
-                        const ny = Math.min(H - 1, Math.max(0, y + Math.round((Math.random() - 0.5) * factor * 2)));
-                        const si = (ny * W + nx) * 4, di = (y * W + x) * 4;
-                        d[di] = s[si]; d[di + 1] = s[si + 1]; d[di + 2] = s[si + 2]; d[di + 3] = s[si + 3];
-                    }
+                for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+                    const nx = Math.min(W - 1, Math.max(0, x + Math.round((Math.random() - 0.5) * factor * 2)));
+                    const ny = Math.min(H - 1, Math.max(0, y + Math.round((Math.random() - 0.5) * factor * 2)));
+                    const si = (ny * W + nx) * 4, di = (y * W + x) * 4;
+                    d[di] = s[si]; d[di + 1] = s[si + 1]; d[di + 2] = s[si + 2]; d[di + 3] = s[si + 3];
                 }
             } else {
                 // 픽셀: 전역 격자 기준으로 블록 안의 모든 픽셀을 정확히 평균 (알파 가중)
@@ -935,363 +1032,417 @@
                     for (let bx = 0; bx < W; bx += factor) {
                         const ex = Math.min(W, bx + factor);
                         let r = 0, g = 0, b = 0, a = 0, n = 0;
-                        for (let y = by; y < ey; y++) for (let x = bx; x < ex; x++) {
-                            const i = (y * W + x) * 4, al = s[i + 3];
-                            r += s[i] * al; g += s[i + 1] * al; b += s[i + 2] * al; a += al; n++;
-                        }
+                        for (let y = by; y < ey; y++) for (let x = bx; x < ex; x++) { const i = (y * W + x) * 4, al = s[i + 3]; r += s[i] * al; g += s[i + 1] * al; b += s[i + 2] * al; a += al; n++; }
                         const R = a ? r / a : 0, G = a ? g / a : 0, B = a ? b / a : 0, A = a / n;
-                        for (let y = by; y < ey; y++) for (let x = bx; x < ex; x++) {
-                            const i = (y * W + x) * 4;
-                            d[i] = R; d[i + 1] = G; d[i + 2] = B; d[i + 3] = A;
-                        }
+                        for (let y = by; y < ey; y++) for (let x = bx; x < ex; x++) { const i = (y * W + x) * 4; d[i] = R; d[i + 1] = G; d[i + 2] = B; d[i + 3] = A; }
                     }
                 }
             }
             lctx.putImageData(out, 0, 0);
             return layer;
         }
-        function drawMosaic(x, y, size, block, style, shape) {
-            if (!mosaicLayer) mosaicLayer = buildMosaicLayer(block, style);
-            const half = size / 2;
-            editorCtx.save();
-            editorCtx.beginPath();
-            if (shape === 'square') editorCtx.rect(x - half, y - half, size, size);
-            else editorCtx.arc(x, y, half, 0, Math.PI * 2);
-            editorCtx.clip();
-            editorCtx.drawImage(mosaicLayer, 0, 0);
-            editorCtx.restore();
+        function mosaicPattern() { if (!mosaicLayer) mosaicLayer = buildMosaicLayer(mosaicBlock, mosaicStyle); return editorCtx.createPattern(mosaicLayer, 'no-repeat'); }
+        function mosaicSegment(x1, y1, x2, y2, size) {
+            const pat = mosaicPattern();
+            if (mosaicShape === 'square') {
+                const dist = Math.hypot(x2 - x1, y2 - y1), steps = Math.max(1, Math.ceil(dist / Math.max(1, size / 4)));
+                editorCtx.save(); editorCtx.fillStyle = pat;
+                for (let i = 0; i <= steps; i++) { const t = i / steps, x = x1 + (x2 - x1) * t, y = y1 + (y2 - y1) * t; editorCtx.fillRect(x - size / 2, y - size / 2, size, size); }
+                editorCtx.restore();
+            } else if (x1 === x2 && y1 === y2) dotWith(pat, x1, y1, size);
+            else strokeWith(pat, x1, y1, x2, y2, size);
         }
-        function drawMosaicLine(x1, y1, x2, y2, size, block, style, shape) {
-            const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2), steps = Math.max(1, Math.floor(dist / (size / 4)));
-            for (let i = 0; i <= steps; i++) { const t = i / steps; drawMosaic(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, size, block, style, shape); }
+        function eraserSegment(x1, y1, x2, y2, size) {
+            if (!originalCanvas) return;
+            const pat = editorCtx.createPattern(originalCanvas, 'no-repeat');
+            if (x1 === x2 && y1 === y2) dotWith(pat, x1, y1, size); else strokeWith(pat, x1, y1, x2, y2, size);
         }
-
-        function drawBrush(x, y, size, color) { editorCtx.beginPath(); editorCtx.arc(x, y, size / 2, 0, Math.PI * 2); editorCtx.fillStyle = color; editorCtx.fill(); }
-        function drawBrushLine(x1, y1, x2, y2, size, color) { editorCtx.beginPath(); editorCtx.moveTo(x1, y1); editorCtx.lineTo(x2, y2); editorCtx.strokeStyle = color; editorCtx.lineWidth = size; editorCtx.lineCap = 'round'; editorCtx.stroke(); }
-        function drawEraser(x, y, size) { if (!originalCanvas) return; const r = size / 2; editorCtx.save(); editorCtx.beginPath(); editorCtx.arc(x, y, r, 0, Math.PI * 2); editorCtx.clip(); editorCtx.drawImage(originalCanvas, 0, 0); editorCtx.restore(); }
-        function drawEraserLine(x1, y1, x2, y2, size) { if (!originalCanvas) return; const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2), steps = Math.max(1, Math.floor(dist / (size / 4))); for (let i = 0; i <= steps; i++) { const t = i / steps; drawEraser(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, size); } }
-
-        // --- 스마트 배경 지우개 기능 시작 ---
-        let smartTargetColor = null;
-        function drawSmartEraser(centerX, centerY, size, targetColor, tolerance) {
-            if(!targetColor) return;
-            const radius = size / 2;
-            const startX = Math.max(0, Math.floor(centerX - radius));
-            const startY = Math.max(0, Math.floor(centerY - radius));
-            const endX = Math.min(editorCanvas.width, Math.ceil(centerX + radius));
-            const endY = Math.min(editorCanvas.height, Math.ceil(centerY + radius));
-            const width = endX - startX; const height = endY - startY;
-            if(width <= 0 || height <= 0) return;
-
-            const imageData = editorCtx.getImageData(startX, startY, width, height);
-            const data = imageData.data;
-            const radiusSq = radius * radius;
-
-            for (let y = 0; y < height; y++) {
-                for (let x = 0; x < width; x++) {
-                    const dx = (startX + x) - centerX;
-                    const dy = (startY + y) - centerY;
-                    if (dx * dx + dy * dy <= radiusSq) {
-                        const idx = (y * width + x) * 4;
-                        if (data[idx + 3] === 0) continue; // 이미 투명하면 패스
-                        // 클릭했던 타겟 색상과 현재 픽셀 색상 비교
-                        const diff = Math.sqrt(Math.pow(data[idx] - targetColor.r, 2) + Math.pow(data[idx+1] - targetColor.g, 2) + Math.pow(data[idx+2] - targetColor.b, 2));
-                        if (diff <= tolerance) data[idx + 3] = 0; // 감도 안쪽이면 완전 삭제
-                        else if (diff <= tolerance + 15) data[idx + 3] = Math.floor(data[idx + 3] * ((diff - tolerance) / 15)); // 경계선 부드럽게
-                    }
-                }
+        // 스마트 배경 지우개: 시작점 색과 비슷한 픽셀만 브러시 안에서 투명하게
+        function smartEraserDab(cx, cy, size, target, tolerance) {
+            if (!target) return;
+            const radius = size / 2, sx = Math.max(0, Math.floor(cx - radius)), sy = Math.max(0, Math.floor(cy - radius));
+            const ex = Math.min(editorCanvas.width, Math.ceil(cx + radius)), ey = Math.min(editorCanvas.height, Math.ceil(cy + radius)), w = ex - sx, h = ey - sy;
+            if (w <= 0 || h <= 0) return;
+            const id = editorCtx.getImageData(sx, sy, w, h), data = id.data, r2 = radius * radius;
+            for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+                const dx = sx + x - cx, dy = sy + y - cy; if (dx * dx + dy * dy > r2) continue;
+                const i = (y * w + x) * 4; if (data[i + 3] === 0) continue;
+                const diff = Math.sqrt((data[i] - target.r) ** 2 + (data[i + 1] - target.g) ** 2 + (data[i + 2] - target.b) ** 2);
+                if (diff <= tolerance) data[i + 3] = 0;
+                else if (diff <= tolerance + 15) data[i + 3] = Math.floor(data[i + 3] * ((diff - tolerance) / 15)); // 경계선 부드럽게
             }
-            editorCtx.putImageData(imageData, startX, startY);
+            editorCtx.putImageData(id, sx, sy);
         }
-        
-        function drawSmartEraserLine(x1, y1, x2, y2, size, targetColor, tolerance) {
-            if (!targetColor) return;
-            const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-            const steps = Math.max(1, Math.floor(dist / (size / 4)));
-            for (let i = 0; i <= steps; i++) {
-                const t = i / steps;
-                drawSmartEraser(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, size, targetColor, tolerance);
+        function smartEraserSegment(x1, y1, x2, y2, size) {
+            const tol = parseInt(toleranceSlider.value), dist = Math.hypot(x2 - x1, y2 - y1), steps = Math.max(1, Math.floor(dist / Math.max(1, size / 4)));
+            for (let i = 0; i <= steps; i++) { const t = i / steps; smartEraserDab(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, size, smartTargetColor, tol); }
+        }
+        // 마법봉: 탭한 곳과 이어진 비슷한 색 영역을 투명하게 (Flood Fill)
+        function magicWand(px, py) {
+            const W = editorCanvas.width, H = editorCanvas.height, x0 = Math.floor(px), y0 = Math.floor(py);
+            if (x0 < 0 || y0 < 0 || x0 >= W || y0 >= H) return;
+            const id = editorCtx.getImageData(0, 0, W, H), data = id.data, si = (y0 * W + x0) * 4;
+            const tr = data[si], tg = data[si + 1], tb = data[si + 2];
+            if (data[si + 3] === 0) { showToast('이미 투명한 지점입니다.'); return; }
+            const tol = parseInt(toleranceSlider.value), visited = new Uint8Array(W * H), stack = [x0, y0];
+            while (stack.length) {
+                const y = stack.pop(), x = stack.pop();
+                if (x < 0 || x >= W || y < 0 || y >= H) continue;
+                const idx = y * W + x; if (visited[idx]) continue; visited[idx] = 1;
+                const p = idx * 4, diff = Math.sqrt((data[p] - tr) ** 2 + (data[p + 1] - tg) ** 2 + (data[p + 2] - tb) ** 2);
+                if (diff <= tol) { data[p + 3] = 0; stack.push(x + 1, y, x - 1, y, x, y + 1, x, y - 1); }
+                else if (diff <= tol + 15) data[p + 3] = Math.floor(data[p + 3] * ((diff - tol) / 15));
+            }
+            editorCtx.putImageData(id, 0, 0);
+            pushHistory();
+            showToast('배경 투명화 완료! (감도: ' + tol + ')');
+        }
+        function normRect(a, b) { const x = Math.max(0, Math.min(a.x, b.x)), y = Math.max(0, Math.min(a.y, b.y)); return { x, y, w: Math.min(editorCanvas.width, Math.max(a.x, b.x)) - x, h: Math.min(editorCanvas.height, Math.max(a.y, b.y)) - y }; }
+        function clearPreview() { previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height); }
+        function drawRectPreview(r, fill) {
+            clearPreview(); if (r.w <= 0 || r.h <= 0) return;
+            previewCtx.save(); previewCtx.fillStyle = fill; previewCtx.fillRect(r.x, r.y, r.w, r.h);
+            const lw = 2 / screenPerImgPx(); previewCtx.lineWidth = lw; previewCtx.setLineDash([6 * lw, 4 * lw]); previewCtx.strokeStyle = '#ff6b96'; previewCtx.strokeRect(r.x, r.y, r.w, r.h); previewCtx.restore();
+        }
+
+        // ---------- 텍스트 ----------
+        function textFont() { return `${textBoldBtn.classList.contains('active') ? 800 : 500} ${parseInt(textSize.value)}px Pretendard, -apple-system, sans-serif`; }
+        function drawTextOn(ctx, st) {
+            const lines = textInput.value.split('\n'), size = parseInt(textSize.value), lh = size * 1.25, color = toolColor.value;
+            ctx.save(); ctx.font = textFont(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+            const top = st.y - (lines.length - 1) * lh / 2;
+            const rgb = parseInt(color.slice(1), 16), lum = 0.299 * (rgb >> 16) + 0.587 * ((rgb >> 8) & 255) + 0.114 * (rgb & 255), contrast = lum > 140 ? '#000000' : '#ffffff';
+            if (textShadowBtn.classList.contains('active')) { ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = size * 0.15; ctx.shadowOffsetX = size * 0.05; ctx.shadowOffsetY = size * 0.05; }
+            lines.forEach((ln, i) => {
+                const y = top + i * lh;
+                if (textOutlineBtn.classList.contains('active')) { ctx.strokeStyle = contrast; ctx.lineWidth = Math.max(2, size * 0.14); ctx.strokeText(ln, st.x, y); ctx.shadowColor = 'transparent'; }
+                ctx.fillStyle = color; ctx.fillText(ln, st.x, y);
+            });
+            ctx.restore();
+            // 미리보기용 경계 상자
+            ctx.font = textFont();
+            const w = Math.max(...lines.map(l => ctx.measureText(l).width)), h = lines.length * lh;
+            return { x: st.x - w / 2, y: st.y - h / 2, w, h };
+        }
+        function renderTextPreview() {
+            if (currentTool !== 'text') return;
+            clearPreview(); if (!textState || !textInput.value.trim()) return;
+            const b = drawTextOn(previewCtx, textState), lw = 1.5 / screenPerImgPx(), pad = parseInt(textSize.value) * 0.15;
+            previewCtx.save(); previewCtx.lineWidth = lw; previewCtx.setLineDash([5 * lw, 4 * lw]); previewCtx.strokeStyle = '#ff6b96'; previewCtx.strokeRect(b.x - pad, b.y - pad, b.w + pad * 2, b.h + pad * 2); previewCtx.restore();
+        }
+        function commitText(silent) {
+            if (!textState || !textInput.value.trim()) { discardText(); return false; }
+            drawTextOn(editorCtx, textState); textState = null; clearPreview(); pushHistory();
+            if (!silent) showToast('텍스트를 넣었어요');
+            return true;
+        }
+        function discardText() { textState = null; clearPreview(); }
+        [textBoldBtn, textOutlineBtn, textShadowBtn].forEach(b => b.addEventListener('click', () => { b.classList.toggle('active'); renderTextPreview(); }));
+        textInput.addEventListener('input', () => {
+            if (!textState && textInput.value.trim()) textState = { x: editorCanvas.width / 2, y: editorCanvas.height / 2 }; // 입력하면 일단 가운데에 표시
+            renderTextPreview();
+        });
+        document.getElementById('textCommitBtn').addEventListener('click', () => { if (!commitText(false)) showToast('글자를 먼저 입력하세요'); });
+        document.getElementById('textCancelBtn').addEventListener('click', () => { textInput.value = ''; discardText(); });
+
+        // ---------- 자르기 ----------
+        function resetCropRect() { cropRect = { x: 0, y: 0, w: editorCanvas.width, h: editorCanvas.height }; if (cropRatio !== 'free') applyRatioToCrop(); else renderCropBox(); }
+        function cropIsFull() { return cropRect.x < 1 && cropRect.y < 1 && cropRect.w > editorCanvas.width - 1 && cropRect.h > editorCanvas.height - 1; }
+        function ratioValue() { return cropRatio === 'free' ? null : cropRatio === 'orig' ? (originalImage ? originalImage.width / originalImage.height : editorCanvas.width / editorCanvas.height) : parseFloat(cropRatio); }
+        function applyRatioToCrop() { // 현재 영역 중심 기준으로 비율 맞추기 (이미지 안에서 최대)
+            const r = ratioValue(); if (!r) { renderCropBox(); return; }
+            const W = editorCanvas.width, H = editorCanvas.height, cx = cropRect.x + cropRect.w / 2, cy = cropRect.y + cropRect.h / 2;
+            let w = cropRect.w, h = w / r; if (h > cropRect.h) { h = cropRect.h; w = h * r; }
+            if (w < 10 || h < 10) { w = W; h = w / r; if (h > H) { h = H; w = h * r; } }
+            let x = Math.min(Math.max(0, cx - w / 2), W - w), y = Math.min(Math.max(0, cy - h / 2), H - h);
+            cropRect = { x, y, w, h }; renderCropBox();
+        }
+        function renderCropBox() {
+            const W = editorCanvas.width, H = editorCanvas.height; if (!W || !H) return;
+            const r = { x: Math.round(cropRect.x), y: Math.round(cropRect.y), w: Math.round(cropRect.w), h: Math.round(cropRect.h) };
+            cropBox.style.left = (r.x / W * 100) + '%'; cropBox.style.top = (r.y / H * 100) + '%';
+            cropBox.style.width = (r.w / W * 100) + '%'; cropBox.style.height = (r.h / H * 100) + '%';
+            cropSizeLabel.textContent = r.w + ' x ' + r.h;
+            if (document.activeElement !== cropX) cropX.value = r.x; if (document.activeElement !== cropY) cropY.value = r.y;
+            if (document.activeElement !== cropW) cropW.value = r.w; if (document.activeElement !== cropH) cropH.value = r.h;
+        }
+        [cropX, cropY, cropW, cropH].forEach(inp => inp.addEventListener('input', () => {
+            const W = editorCanvas.width, H = editorCanvas.height;
+            let x = Math.max(0, parseInt(cropX.value) || 0), y = Math.max(0, parseInt(cropY.value) || 0), w = Math.max(1, parseInt(cropW.value) || 1), h = Math.max(1, parseInt(cropH.value) || 1);
+            const r = ratioValue(); if (r) { if (inp === cropH) w = h * r; else h = w / r; }
+            x = Math.min(x, W - 1); y = Math.min(y, H - 1); w = Math.min(w, W - x); h = Math.min(h, H - y);
+            cropRect = { x, y, w, h }; renderCropBox();
+        }));
+        // 자르기 드래그: handle = 'nw'|'n'|...|'move'|'new'
+        function cropDragUpdate(drag, p) {
+            const W = editorCanvas.width, H = editorCanvas.height, s = drag.start, r = ratioValue();
+            if (drag.handle === 'move') {
+                cropRect.x = Math.min(Math.max(0, s.x + p.x - drag.p0.x), W - s.w); cropRect.y = Math.min(Math.max(0, s.y + p.y - drag.p0.y), H - s.h);
+                renderCropBox(); return;
+            }
+            const px = Math.min(Math.max(0, p.x), W), py = Math.min(Math.max(0, p.y), H);
+            let hd = drag.handle;
+            if (hd === 'new') { // 새로 그리기 = 시작점을 고정한 모서리 끌기
+                const ax = drag.p0.x, ay = drag.p0.y; let w = Math.abs(px - ax), h = Math.abs(py - ay);
+                if (r) { if (w / Math.max(h, 1e-6) > r) h = w / r; else w = h * r; const f = Math.min(1, (px >= ax ? W - ax : ax) / w || 1, (py >= ay ? H - ay : ay) / h || 1); w *= f; h *= f; }
+                cropRect = { x: px >= ax ? ax : ax - w, y: py >= ay ? ay : ay - h, w, h }; renderCropBox(); return;
+            }
+            let x1 = s.x, y1 = s.y, x2 = s.x + s.w, y2 = s.y + s.h;
+            if (!r) {
+                if (hd.includes('w')) x1 = Math.min(px, x2 - 1); if (hd.includes('e')) x2 = Math.max(px, x1 + 1);
+                if (hd.includes('n')) y1 = Math.min(py, y2 - 1); if (hd.includes('s')) y2 = Math.max(py, y1 + 1);
+                cropRect = { x: x1, y: y1, w: x2 - x1, h: y2 - y1 }; renderCropBox(); return;
+            }
+            // 비율 고정
+            if (hd.length === 2) { // 모서리: 반대쪽 모서리 고정
+                const ax = hd.includes('w') ? x2 : x1, ay = hd.includes('n') ? y2 : y1, dx = hd.includes('w') ? -1 : 1, dy = hd.includes('n') ? -1 : 1;
+                let w = Math.max(1, (px - ax) * dx), h = Math.max(1, (py - ay) * dy);
+                if (w / h > r) h = w / r; else w = h * r;
+                const f = Math.min(1, (dx > 0 ? W - ax : ax) / w, (dy > 0 ? H - ay : ay) / h); w *= f; h *= f;
+                cropRect = { x: dx > 0 ? ax : ax - w, y: dy > 0 ? ay : ay - h, w, h };
+            } else if (hd === 'e' || hd === 'w') { // 좌우 변: 세로 중심 고정
+                const ax = hd === 'w' ? x2 : x1, dx = hd === 'w' ? -1 : 1, cy = (y1 + y2) / 2;
+                let w = Math.max(1, (px - ax) * dx), h = w / r; const f = Math.min(1, (dx > 0 ? W - ax : ax) / w, 2 * Math.min(cy, H - cy) / h); w *= f; h *= f;
+                cropRect = { x: dx > 0 ? ax : ax - w, y: cy - h / 2, w, h };
+            } else { // 위아래 변: 가로 중심 고정
+                const ay = hd === 'n' ? y2 : y1, dy = hd === 'n' ? -1 : 1, cx = (x1 + x2) / 2;
+                let h = Math.max(1, (py - ay) * dy), w = h * r; const f = Math.min(1, (dy > 0 ? H - ay : ay) / h, 2 * Math.min(cx, W - cx) / w); w *= f; h *= f;
+                cropRect = { x: cx - w / 2, y: dy > 0 ? ay : ay - h, w, h };
+            }
+            renderCropBox();
+        }
+        document.getElementById('cropApplyBtn').addEventListener('click', () => {
+            const r = { x: Math.round(cropRect.x), y: Math.round(cropRect.y), w: Math.round(cropRect.w), h: Math.round(cropRect.h) };
+            if (r.w < 1 || r.h < 1) return;
+            if (r.x === 0 && r.y === 0 && r.w === editorCanvas.width && r.h === editorCanvas.height) { showToast('자를 영역을 먼저 지정하세요'); return; }
+            applyGeometry(c => cropCanvas(c, r));
+            showToast('자르기 완료! (' + r.w + ' x ' + r.h + ')');
+        });
+        document.getElementById('cropResetBtn').addEventListener('click', resetCropRect);
+        document.getElementById('cropApplyAllBtn').addEventListener('click', async () => {
+            const useX = Math.round(cropRect.x), useY = Math.round(cropRect.y), tw = Math.round(cropRect.w), th = Math.round(cropRect.h);
+            if (!(await transformOthers(img => {
+                const sx = Math.max(0, Math.min(useX, img.width - tw)), sy = Math.max(0, Math.min(useY, img.height - th)), w = Math.min(tw, img.width - sx), h = Math.min(th, img.height - sy);
+                return (w > 0 && h > 0) ? cropCanvas(img, { x: sx, y: sy, w, h }) : null;
+            }))) return;
+            document.getElementById('cropApplyBtn').click();
+            showToast(selectedFiles.length + '개 자르기 완료!');
+        });
+        // 편집 중인 이미지를 제외한 나머지 이미지에 같은 변형을 적용
+        async function transformOthers(fn) {
+            for (let i = 0; i < selectedFiles.length; i++) {
+                if (i === editingIndex) continue;
+                const img = await loadImage(filePreviews[i]), out = fn(img);
+                if (!out) continue;
+                const blob = await canvasToBlob(out), file = new File([blob], selectedFiles[i].name, { type: 'image/png' });
+                URL.revokeObjectURL(filePreviews[i]); selectedFiles[i] = file; filePreviews[i] = URL.createObjectURL(blob);
+            }
+            updateImageGrid();
+            return true;
+        }
+
+        // ---------- 회전 / 반전 / 크기 변경 ----------
+        document.getElementById('rotLeftBtn').addEventListener('click', () => applyGeometry(c => rotateCanvas(c, -1)));
+        document.getElementById('rotRightBtn').addEventListener('click', () => applyGeometry(c => rotateCanvas(c, 1)));
+        document.getElementById('flipHBtn').addEventListener('click', () => applyGeometry(c => flipCanvas(c, true)));
+        document.getElementById('flipVBtn').addEventListener('click', () => applyGeometry(c => flipCanvas(c, false)));
+        function syncResizeInputs() { resizeW.value = editorCanvas.width; resizeH.value = editorCanvas.height; document.querySelectorAll('[data-pct]').forEach(b => b.classList.remove('active')); }
+        resizeLockBtn.addEventListener('click', () => { resizeLockBtn.classList.toggle('active'); resizeLockBtn.textContent = resizeLockBtn.classList.contains('active') ? '🔗' : '⛓️‍💥'; });
+        resizeW.addEventListener('input', () => { document.querySelectorAll('[data-pct]').forEach(b => b.classList.remove('active')); if (resizeLockBtn.classList.contains('active')) resizeH.value = Math.max(1, Math.round((parseInt(resizeW.value) || 0) * editorCanvas.height / editorCanvas.width)); });
+        resizeH.addEventListener('input', () => { document.querySelectorAll('[data-pct]').forEach(b => b.classList.remove('active')); if (resizeLockBtn.classList.contains('active')) resizeW.value = Math.max(1, Math.round((parseInt(resizeH.value) || 0) * editorCanvas.width / editorCanvas.height)); });
+        document.querySelectorAll('[data-pct]').forEach(b => b.addEventListener('click', () => {
+            document.querySelectorAll('[data-pct]').forEach(x => x.classList.toggle('active', x === b));
+            const p = parseInt(b.dataset.pct) / 100; resizeW.value = Math.max(1, Math.round(editorCanvas.width * p)); resizeH.value = Math.max(1, Math.round(editorCanvas.height * p));
+        }));
+        function resizeTarget() { const w = parseInt(resizeW.value), h = parseInt(resizeH.value); if (!(w > 0 && h > 0)) { showToast('크기를 올바르게 입력하세요'); return null; } if (w > 12000 || h > 12000) { showToast('최대 12000px까지 가능해요'); return null; } return { w, h }; }
+        document.getElementById('resizeApplyBtn').addEventListener('click', () => {
+            const t = resizeTarget(); if (!t) return;
+            if (t.w === editorCanvas.width && t.h === editorCanvas.height) { showToast('현재 크기와 같아요'); return; }
+            applyGeometry(c => resampleCanvas(c, t.w, t.h));
+            showToast('크기 변경 완료! (' + t.w + ' x ' + t.h + ')');
+        });
+        document.getElementById('resizeApplyAllBtn').addEventListener('click', async () => {
+            const t = resizeTarget(); if (!t) return;
+            const sx = t.w / editorCanvas.width, sy = t.h / editorCanvas.height;
+            await transformOthers(img => resampleCanvas(img, img.width * sx, img.height * sy));
+            if (t.w !== editorCanvas.width || t.h !== editorCanvas.height) applyGeometry(c => resampleCanvas(c, t.w, t.h));
+            showToast(selectedFiles.length + '개 크기 변경 완료! (' + Math.round(sx * 100) + '%)');
+        });
+
+        // ---------- 포인터 입력 (마우스/터치/펜 공통) ----------
+        const activePointers = new Map();
+        let gesture = null; // { type: 'draw'|'pan'|'pinch'|'crop'|'tap'|'blocked', ... }
+        let spaceDown = false, strokeBase = null;
+
+        function beginPinch() {
+            const [a, b] = [...activePointers.values()];
+            gesture = { type: 'pinch', d0: Math.hypot(a.x - b.x, a.y - b.y) || 1, m0: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, z0: zoomLevel, px0: panX, py0: panY };
+        }
+        function updatePinch() {
+            const [a, b] = [...activePointers.values()], g = gesture;
+            const d = Math.hypot(a.x - b.x, a.y - b.y), m = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+            zoomLevel = g.z0; panX = g.px0 + (m.x - g.m0.x); panY = g.py0 + (m.y - g.m0.y);
+            zoomAt(g.z0 * d / g.d0, m.x, m.y);
+        }
+        // 두 번째 손가락이 닿으면 방금 시작한 획은 취소 (확대하려다 그려지는 것 방지)
+        function cancelStroke() {
+            if (gesture && gesture.type === 'draw' && strokeBase) { editorCtx.clearRect(0, 0, editorCanvas.width, editorCanvas.height); editorCtx.drawImage(strokeBase, 0, 0); }
+            if (gesture && (gesture.type === 'draw' || gesture.type === 'crop')) { if (gesture.type === 'crop') { cropRect = gesture.start; renderCropBox(); } if (currentTool !== 'text') clearPreview(); else renderTextPreview(); }
+            strokeBase = null; mosaicLayer = null;
+        }
+        function startDraw(e) {
+            const p = toImg(e), size = parseInt(toolSize.value);
+            const needsBase = ['brush', 'eraser', 'mosaic', 'smart'].includes(currentTool) && e.pointerType !== 'mouse';
+            strokeBase = needsBase ? cloneCanvas(editorCanvas) : null;
+            gesture = { type: 'draw', last: p, p0: p, moved: false, sx: e.clientX, sy: e.clientY, pointerType: e.pointerType };
+            switch (currentTool) {
+                case 'brush': dotWith(toolColor.value, p.x, p.y, size); break;
+                case 'eraser': eraserSegment(p.x, p.y, p.x, p.y, size); break;
+                case 'mosaic': mosaicLayer = null; if (mosaicMode === 'brush') mosaicSegment(p.x, p.y, p.x, p.y, size); else mosaicPattern(); break;
+                case 'smart': {
+                    const px = editorCtx.getImageData(Math.min(editorCanvas.width - 1, Math.max(0, Math.floor(p.x))), Math.min(editorCanvas.height - 1, Math.max(0, Math.floor(p.y))), 1, 1).data;
+                    smartTargetColor = { r: px[0], g: px[1], b: px[2], a: px[3] };
+                    if (smartTargetColor.a === 0) { showToast('투명한 곳입니다. 지울 배경색 위에서 시작하세요.'); gesture = { type: 'blocked' }; return; }
+                    smartEraserSegment(p.x, p.y, p.x, p.y, size); break;
+                }
+                case 'text':
+                    if (!textInput.value.trim()) { gesture = { type: 'blocked' }; showToast('글자를 먼저 입력하세요'); textInput.focus(); return; }
+                    textState = { x: p.x, y: p.y }; renderTextPreview(); break;
             }
         }
-        // --- 스마트 배경 지우개 기능 끝 ---
-
-        editorCanvas.addEventListener('mousedown', (e) => { 
-            const rect = editorCanvas.getBoundingClientRect();
-            const scaleX = editorCanvas.width / rect.width;
-            const scaleY = editorCanvas.height / rect.height;
-            
-            // 스페이스바를 누르고 화면 이동 중일 때는 작동 방지!
-            if (typeof isSpacePressed !== 'undefined' && (isSpacePressed || isPanning)) return;
-
-            // --- 프로버전 크로마키(요술봉/마법봉) 기능 시작 ---
-            if (currentTool === 'chromakey') {
-                // (주의!) clickX와 clickY는 여기서 딱 한 번만 선언해야 에러가 안 납니다.
-                const clickX = Math.floor((e.clientX - rect.left) * scaleX);
-                const clickY = Math.floor((e.clientY - rect.top) * scaleY);
-                
-                const canvasW = editorCanvas.width;
-                const canvasH = editorCanvas.height;
-                const imageData = editorCtx.getImageData(0, 0, canvasW, canvasH);
-                const data = imageData.data;
-                
-                // 클릭한 곳의 색상 (지울 기준 색상)
-                const startIdx = (clickY * canvasW + clickX) * 4;
-                const targetR = data[startIdx], targetG = data[startIdx+1], targetB = data[startIdx+2], targetA = data[startIdx+3];
-                
-                if (targetA === 0) { showToast('이미 투명한 지점입니다.'); return; }
-                
-                const tolerance = parseInt(document.getElementById('toleranceSlider').value);
-                
-                // 방문 여부 기록용 (무한 루프 방지)
-                const visited = new Uint8Array(canvasW * canvasH);
-                const stack = [clickX, clickY]; // X, Y 좌표를 짝지어서 저장
-                
-                // 찰흙 퍼지듯이 주변으로만 지워나가는 마법봉 알고리즘 (Flood Fill)
-                while (stack.length > 0) {
-                    const y = stack.pop();
-                    const x = stack.pop();
-                    
-                    if (x < 0 || x >= canvasW || y < 0 || y >= canvasH) continue;
-                    
-                    const idx = y * canvasW + x;
-                    if (visited[idx]) continue; // 이미 지나간 길이면 패스
-                    visited[idx] = 1;
-                    
-                    const pIdx = idx * 4;
-                    const r = data[pIdx], g = data[pIdx+1], b = data[pIdx+2];
-                    
-                    // 기준 색상과 현재 픽셀 색상 차이 계산
-                    const diff = Math.sqrt(Math.pow(r - targetR, 2) + Math.pow(g - targetG, 2) + Math.pow(b - targetB, 2));
-                    
-                    // 색상이 감도 안쪽이면 지우고 계속 퍼져나감
-                    if (diff <= tolerance) {
-                        data[pIdx + 3] = 0; // 완전 투명
-                        stack.push(x + 1, y);
-                        stack.push(x - 1, y);
-                        stack.push(x, y + 1);
-                        stack.push(x, y - 1);
-                    } else if (diff <= tolerance + 15) {
-                        // 감도 범위를 살짝 벗어난 경계선은 반투명하게 깎아줌 (자글자글 방지)
-                        // 단, 더 이상 스택에 추가하지 않아서 선 안쪽으로 파고들지 않게 함
-                        const alphaScale = (diff - tolerance) / 15;
-                        data[pIdx + 3] = Math.floor(data[pIdx + 3] * alphaScale);
-                    }
+        function moveDraw(e) {
+            const g = gesture, size = parseInt(toolSize.value);
+            if (Math.hypot(e.clientX - g.sx, e.clientY - g.sy) > 4) g.moved = true;
+            const events = (e.getCoalescedEvents && e.getCoalescedEvents().length) ? e.getCoalescedEvents() : [e];
+            for (const ev of events) {
+                const p = toImg(ev), l = g.last;
+                switch (currentTool) {
+                    case 'brush': strokeWith(toolColor.value, l.x, l.y, p.x, p.y, size); break;
+                    case 'eraser': eraserSegment(l.x, l.y, p.x, p.y, size); break;
+                    case 'smart': smartEraserSegment(l.x, l.y, p.x, p.y, size); break;
+                    case 'mosaic': if (mosaicMode === 'brush') mosaicSegment(l.x, l.y, p.x, p.y, size); break;
                 }
-                
-                editorCtx.putImageData(imageData, 0, 0);
-                saveHistory();
-                showToast('마법봉 투명화 완료! (감도: ' + tolerance + ')');
+                g.last = p;
+            }
+            const p = g.last;
+            if (currentTool === 'mosaic' && mosaicMode === 'box') drawRectPreview(normRect(g.p0, p), previewCtx.createPattern(mosaicLayer, 'no-repeat'));
+            else if (currentTool === 'rect') drawRectPreview(normRect(g.p0, p), toolColor.value);
+            else if (currentTool === 'text' && textState) { textState = { x: p.x, y: p.y }; renderTextPreview(); }
+        }
+        function endDraw(g) {
+            const p = g.last;
+            if ((currentTool === 'mosaic' && mosaicMode === 'box') || currentTool === 'rect') {
+                clearPreview();
+                const r = normRect(g.p0, p);
+                if (r.w >= 1 && r.h >= 1) {
+                    editorCtx.save(); editorCtx.fillStyle = currentTool === 'rect' ? toolColor.value : mosaicPattern(); editorCtx.fillRect(r.x, r.y, r.w, r.h); editorCtx.restore();
+                    pushHistory();
+                }
+            } else if (currentTool !== 'text') pushHistory();
+            strokeBase = null; mosaicLayer = null;
+        }
+
+        canvasArea.addEventListener('pointerdown', (e) => {
+            if (!editorOverlay.classList.contains('active') || edBusy) return;
+            if (e.target.closest('.img-nav-btn')) return;
+            if (e.pointerType === 'mouse' && e.button !== 0 && e.button !== 1) return;
+            e.preventDefault();
+            try { canvasArea.setPointerCapture(e.pointerId); } catch (_) {}
+            activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+            if (activePointers.size === 2) { cancelStroke(); beginPinch(); return; }
+            if (activePointers.size > 2 || gesture) return;
+            // 화면 이동: Space+드래그, 휠 클릭, 회전·크기 도구에서 한 손가락
+            if (spaceDown || e.button === 1 || currentTool === 'transform') { gesture = { type: 'pan', x0: e.clientX, y0: e.clientY, px0: panX, py0: panY }; canvasStage.classList.add('pan'); return; }
+            const p = toImg(e);
+            if (currentTool === 'crop') {
+                const h = e.target.closest('.crop-handle'), inBox = e.target.closest('.crop-box');
+                gesture = { type: 'crop', handle: h ? h.dataset.handle : (inBox && !cropIsFull()) ? 'move' : 'new', p0: p, start: { ...cropRect } };
                 return;
             }
-            // --- 프로버전 크로마키(요술봉/마법봉) 기능 끝 ---
-            
-            if (currentTool === 'crop') { 
-                isDraggingCrop = true; 
-                dragCropStartX = Math.round((e.clientX - rect.left) * scaleX); 
-                dragCropStartY = Math.round((e.clientY - rect.top) * scaleY);
-                dragCropEndX = dragCropStartX;
-                dragCropEndY = dragCropStartY;
-                cropPreviewCanvas = document.createElement('canvas');
-                cropPreviewCanvas.width = editorCanvas.width;
-                cropPreviewCanvas.height = editorCanvas.height;
-                cropPreviewCanvas.getContext('2d').drawImage(editorCanvas, 0, 0);
-                return; 
-            }
-            
-            isDrawing = true; 
-            lastX = (e.clientX - rect.left) * scaleX; 
-            lastY = (e.clientY - rect.top) * scaleY; 
-            startX = lastX; 
-            startY = lastY; 
-            if (currentTool === 'rect') { 
-                tempCanvas = document.createElement('canvas'); 
-                tempCanvas.width = editorCanvas.width; 
-                tempCanvas.height = editorCanvas.height; 
-                tempCanvas.getContext('2d').drawImage(editorCanvas, 0, 0); 
-            } else if (currentTool === 'brush-mosaic') { mosaicLayer = null; drawMosaic(lastX, lastY, parseInt(toolSize.value), mosaicBlock, mosaicStyle, mosaicShape); } 
-            else if (currentTool === 'brush-color') drawBrush(lastX, lastY, parseInt(toolSize.value), toolColor.value); 
-            else if (currentTool === 'eraser') drawEraser(lastX, lastY, parseInt(toolSize.value)); 
-            else if (currentTool === 'smart-eraser') {
-                const pixel = editorCtx.getImageData(lastX, lastY, 1, 1).data;
-                smartTargetColor = { r: pixel[0], g: pixel[1], b: pixel[2], a: pixel[3] };
-                if (smartTargetColor.a === 0) { showToast('투명한 곳입니다. 지울 배경색(파란색)을 먼저 클릭하세요.'); isDrawing = false; return; }
-                drawSmartEraser(lastX, lastY, parseInt(toolSize.value), smartTargetColor, parseInt(document.getElementById('toleranceSlider').value));
-}
+            if (currentTool === 'wand') { gesture = { type: 'tap', sx: e.clientX, sy: e.clientY, p }; return; }
+            startDraw(e);
         });
-
-        editorCanvas.addEventListener('mousemove', (e) => { 
-            const rect = editorCanvas.getBoundingClientRect();
-            const scaleX = editorCanvas.width / rect.width;
-            const scaleY = editorCanvas.height / rect.height;
-            
-            if (currentTool === 'crop' && isDraggingCrop) { 
-                dragCropEndX = Math.round((e.clientX - rect.left) * scaleX); 
-                dragCropEndY = Math.round((e.clientY - rect.top) * scaleY);
-                dragCropEndX = Math.max(0, Math.min(editorCanvas.width, dragCropEndX));
-                dragCropEndY = Math.max(0, Math.min(editorCanvas.height, dragCropEndY));
-                drawCropPreview();
-                return; 
-            } 
-            
-            if (!isDrawing || currentTool === 'crop') return;
-            const x = (e.clientX - rect.left) * scaleX, y = (e.clientY - rect.top) * scaleY; 
-            if (currentTool === 'brush-mosaic') drawMosaicLine(lastX, lastY, x, y, parseInt(toolSize.value), mosaicBlock, mosaicStyle, mosaicShape); 
-            else if (currentTool === 'brush-color') drawBrushLine(lastX, lastY, x, y, parseInt(toolSize.value), toolColor.value); 
-            else if (currentTool === 'eraser') drawEraserLine(lastX, lastY, x, y, parseInt(toolSize.value)); 
-else if (currentTool === 'smart-eraser') {
-    drawSmartEraserLine(lastX, lastY, x, y, parseInt(toolSize.value), smartTargetColor, parseInt(document.getElementById('toleranceSlider').value));
-}
-            else if (currentTool === 'rect' && tempCanvas) { 
-                editorCtx.drawImage(tempCanvas, 0, 0); 
-                editorCtx.strokeStyle = toolColor.value; 
-                editorCtx.lineWidth = 2; 
-                editorCtx.setLineDash([5, 5]); 
-                editorCtx.strokeRect(Math.min(startX, x), Math.min(startY, y), Math.abs(x - startX), Math.abs(y - startY)); 
-                editorCtx.setLineDash([]); 
-            } 
-            lastX = x; 
-            lastY = y; 
+        canvasArea.addEventListener('pointermove', (e) => {
+            if (activePointers.has(e.pointerId)) activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+            if (e.pointerType === 'mouse' && brushLikeTool() && !spaceDown) { placeCursor(e.clientX, e.clientY); brushCursor.classList.add('active'); }
+            if (!gesture || !activePointers.has(e.pointerId)) return;
+            if (gesture.type === 'pinch') { if (activePointers.size >= 2) updatePinch(); return; }
+            if (gesture.type === 'pan') { panX = gesture.px0 + e.clientX - gesture.x0; panY = gesture.py0 + e.clientY - gesture.y0; applyView(); return; }
+            if (gesture.type === 'crop') { cropDragUpdate(gesture, toImg(e)); return; }
+            if (gesture.type === 'tap') { if (Math.hypot(e.clientX - gesture.sx, e.clientY - gesture.sy) > 8) gesture.moved = true; return; }
+            if (gesture.type === 'draw') moveDraw(e);
         });
+        function endPointer(e) {
+            if (!activePointers.has(e.pointerId)) return;
+            activePointers.delete(e.pointerId);
+            if (!gesture) return;
+            if (gesture.type === 'pinch') { if (activePointers.size === 0) gesture = null; else gesture = { type: 'blocked' }; return; } // 남은 손가락은 무시
+            if (activePointers.size > 0) return;
+            const g = gesture; gesture = null; canvasStage.classList.toggle('pan', currentTool === 'transform');
+            if (e.type === 'pointercancel') { if (g.type === 'draw') { gesture = g; cancelStroke(); gesture = null; } return; }
+            if (g.type === 'tap' && !g.moved) magicWand(g.p.x, g.p.y);
+            else if (g.type === 'crop' && g.handle === 'new' && (cropRect.w < 3 || cropRect.h < 3)) { cropRect = g.start; renderCropBox(); }
+            else if (g.type === 'draw') endDraw(g);
+        }
+        canvasArea.addEventListener('pointerup', endPointer);
+        canvasArea.addEventListener('pointercancel', endPointer);
+        canvasArea.addEventListener('contextmenu', (e) => e.preventDefault());
 
-        // --- 캔버스 밖으로 나가도 드래그가 유지되도록 window 이벤트로 변경 ---
-        window.addEventListener('mouseup', (e) => { 
-            if (currentTool === 'crop' && isDraggingCrop) { 
-                isDraggingCrop = false;
-                if (cropPreviewCanvas) {
-                    editorCtx.drawImage(cropPreviewCanvas, 0, 0);
-                    cropPreviewCanvas = null;
-                }
-                return; 
-            } 
-            if (!isDrawing || currentTool === 'crop') return; 
-            isDrawing = false; 
-            if (currentTool === 'rect' && tempCanvas) { 
-                const rect = editorCanvas.getBoundingClientRect();
-                const scaleX = editorCanvas.width / rect.width;
-                const scaleY = editorCanvas.height / rect.height;
-                const x = (e.clientX - rect.left) * scaleX, y = (e.clientY - rect.top) * scaleY; 
-                editorCtx.drawImage(tempCanvas, 0, 0); 
-                editorCtx.fillStyle = toolColor.value; 
-                editorCtx.fillRect(Math.min(startX, x), Math.min(startY, y), Math.abs(x - startX), Math.abs(y - startY)); 
-                tempCanvas = null; 
-            } 
-            saveHistory(); 
-        });
-
-        editorCanvas.addEventListener('mouseenter', (e) => { 
-            // 캔버스 밖에서 마우스를 뗀 채로 다시 들어왔을 때 오작동(찌꺼기) 방지
-            if (isDrawing && e.buttons !== 1) { 
-                isDrawing = false; 
-                if (tempCanvas) tempCanvas = null;
-            } 
-        });
-        // --- 마우스 이탈 방지 코드 끝 ---
-
-        document.addEventListener('mousemove', (e) => {
-            if (currentTool !== 'crop' || !isDraggingCrop) return;
-            const rect = editorCanvas.getBoundingClientRect();
-            const scaleX = editorCanvas.width / rect.width;
-            const scaleY = editorCanvas.height / rect.height;
-            dragCropEndX = Math.round((e.clientX - rect.left) * scaleX);
-            dragCropEndY = Math.round((e.clientY - rect.top) * scaleY);
-            dragCropEndX = Math.max(0, Math.min(editorCanvas.width, dragCropEndX));
-            dragCropEndY = Math.max(0, Math.min(editorCanvas.height, dragCropEndY));
-            drawCropPreview();
-        });
-
-        document.addEventListener('mouseup', (e) => {
-            if (currentTool !== 'crop' || !isDraggingCrop) return;
-            isDraggingCrop = false;
-            if (cropPreviewCanvas) {
-                editorCtx.drawImage(cropPreviewCanvas, 0, 0);
-                cropPreviewCanvas = null;
-            }
-        });
-
-        // --- 프로버전 확대/이동 마술 코드 시작 ---
-        // 1. 마우스 휠로 확대/축소 (Ctrl을 누른 채 휠을 굴리거나, 그냥 휠을 굴려도 확대되게 설정)
-        canvasArea.addEventListener('wheel', (e) => {
-            if (!editorOverlay.classList.contains('active')) return;
-            e.preventDefault();
-            
-            const zoomFactor = 1.1;
-            if (e.deltaY < 0) {
-                if (zoomLevel < 10) zoomLevel *= zoomFactor; // 최대 10배 확대
-            } else {
-                if (zoomLevel > 0.5) zoomLevel /= zoomFactor; // 최소 0.5배 축소
-            }
-            applyZoomTransform();
-        }, { passive: false });
-
-        // 2. 스페이스바 감지 리스너
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && editorOverlay.classList.contains('active') && !saveModal.classList.contains('active')) {
-                // 입력창에 글 쓰고 있는 게 아닐 때만 작동
-                if (document.activeElement.tagName !== 'INPUT') {
-                    e.preventDefault();
-                    isSpacePressed = true;
-                    editorCanvas.style.cursor = 'grab';
-                }
-            }
-        });
-        document.addEventListener('keyup', (e) => {
-            if (e.code === 'Space') {
-                isSpacePressed = false;
-                if (currentTool === 'crop' || currentTool === 'rect') editorCanvas.style.cursor = 'crosshair';
-                else editorCanvas.style.cursor = 'crosshair';
-            }
-        });
-
-        // 3. 캔버스 영역에서의 드래그(이동 및 그림 그리기 조율)
-        canvasArea.addEventListener('mousedown', (e) => {
-            if (isSpacePressed || e.button === 1) { // 스페이스바를 눌렀거나 마우스 휠 클릭 시 화면 이동
-                isPanning = true;
-                editorCanvas.style.cursor = 'grabbing';
-                startPanX = e.clientX - offsetX;
-                startPanY = e.clientY - offsetY;
-                e.stopPropagation();
-            }
-        }, true); // true를 주어 그리기 이벤트보다 먼저 가로챕니다.
-
-        document.addEventListener('mousemove', (e) => {
-            if (isPanning) {
-                offsetX = e.clientX - startPanX;
-                offsetY = e.clientY - startPanY;
-                applyZoomTransform();
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            if (isPanning) {
-                isPanning = false;
-                editorCanvas.style.cursor = isSpacePressed ? 'grab' : 'crosshair';
-            }
-        });
-
-        // 4. 새 이미지를 열거나 편집창을 닫을 때 확대 초기화해주는 기능 연동
-        const originalSwitchToImage = switchToImage;
-        switchToImage = function(ni) {
-            zoomLevel = 1; offsetX = 0; offsetY = 0; applyZoomTransform();
-            originalSwitchToImage(ni);
-        };
-        const originalOpenEditor = openEditor;
-        openEditor = function(idx) {
-            zoomLevel = 1; offsetX = 0; offsetY = 0; applyZoomTransform();
-            originalOpenEditor(idx);
-        };
-        // --- 프로버전 확대/이동 마술 코드 끝 ---
-
+        // ---------- 열기 / 이동 / 닫기 / 저장 ----------
+        function loadIntoEditor(idx, onReady) {
+            editingIndex = idx; edHistory = []; edRedo = []; hasChanges = false; textState = null; mosaicLayer = null; gesture = null; activePointers.clear();
+            loadImage(filePreviews[idx]).then(img => {
+                originalImage = img;
+                editorCanvas.width = img.width; editorCanvas.height = img.height;
+                editorCtx.clearRect(0, 0, img.width, img.height); editorCtx.drawImage(img, 0, 0);
+                originalCanvas = cloneCanvas(editorCanvas);
+                const ts = Math.max(12, Math.min(400, Math.round(Math.min(img.width, img.height) / 12))); textSize.value = ts; textSizeInput.value = ts;
+                onReady && onReady();
+                onCanvasSizeChanged(); clearPreview();
+                pushHistory(true); updateNavButtons(); refreshOptions();
+            });
+        }
+        function openEditor(idx) { loadIntoEditor(idx, () => { editorOverlay.classList.add('active'); document.body.classList.add('editor-open'); }); }
+        function switchToImage(ni) { loadIntoEditor(ni); }
+        function updateNavButtons() { imgPrevBtn.disabled = editingIndex <= 0; imgNextBtn.disabled = editingIndex >= selectedFiles.length - 1; imgPrevBtn.style.display = imgNextBtn.style.display = selectedFiles.length > 1 ? '' : 'none'; }
+        imgPrevBtn.addEventListener('click', () => { if (editingIndex > 0) tryNavigate(editingIndex - 1); });
+        imgNextBtn.addEventListener('click', () => { if (editingIndex < selectedFiles.length - 1) tryNavigate(editingIndex + 1); });
+        function tryNavigate(ni) { commitText(true); if (hasChanges) { pendingAction = { type: 'navigate', index: ni }; saveModal.classList.add('active'); } else switchToImage(ni); }
+        function tryClose() { commitText(true); if (hasChanges) { pendingAction = { type: 'close' }; saveModal.classList.add('active'); } else closeEditor(); }
+        function runPending() { if (!pendingAction) return; if (pendingAction.type === 'navigate') switchToImage(pendingAction.index); else if (pendingAction.type === 'close') closeEditor(); pendingAction = null; }
+        saveModalDiscard.addEventListener('click', () => { saveModal.classList.remove('active'); runPending(); });
+        saveModalCancel.addEventListener('click', () => { saveModal.classList.remove('active'); pendingAction = null; });
+        saveModalSave.addEventListener('click', async () => { saveModal.classList.remove('active'); await applyEdit(); runPending(); });
+        function closeEditor() { editorOverlay.classList.remove('active'); document.body.classList.remove('editor-open'); brushCursor.classList.remove('active'); editingIndex = null; edHistory = []; edRedo = []; hasChanges = false; textState = null; gesture = null; activePointers.clear(); originalCanvas = null; }
+        async function applyEdit() {
+            if (editingIndex === null || !originalImage) return;
+            commitText(true);
+            const blob = await canvasToBlob(editorCanvas), file = new File([blob], selectedFiles[editingIndex].name, { type: 'image/png' });
+            URL.revokeObjectURL(filePreviews[editingIndex]); selectedFiles[editingIndex] = file; filePreviews[editingIndex] = URL.createObjectURL(blob);
+            hasChanges = false; updateImageGrid();
+        }
         editorClose.addEventListener('click', tryClose);
         editorCancel.addEventListener('click', tryClose);
-        
-        editorCancel.addEventListener('click', tryClose);
-        function closeEditor() { editorOverlay.classList.remove('active'); document.body.classList.remove('editor-open'); brushCursor.classList.remove('active'); cropOverlay.classList.remove('active'); editingIndex = null; historyStack = []; redoStack = []; hasChanges = false; isDraggingCrop = false; cropPreviewCanvas = null; }
-
-        async function applyEdit() { if (editingIndex === null || !originalImage) return; const blob = await new Promise(r => editorCanvas.toBlob(r, 'image/png')), file = new File([blob], selectedFiles[editingIndex].name, { type: 'image/png' }); URL.revokeObjectURL(filePreviews[editingIndex]); selectedFiles[editingIndex] = file; filePreviews[editingIndex] = URL.createObjectURL(blob); hasChanges = false; updateImageGrid(); }
-
         editorSave.addEventListener('click', async () => { await applyEdit(); closeEditor(); });
 
-        document.addEventListener('keydown', (e) => { if (!editorOverlay.classList.contains('active')) return; if (saveModal.classList.contains('active')) return; if (e.key === 'Escape') tryClose(); if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undoEdit(); } if ((e.ctrlKey || e.metaKey) && e.key === 'y') { e.preventDefault(); redoEdit(); } if (e.key === 'ArrowLeft' && editingIndex > 0) { e.preventDefault(); tryNavigate(editingIndex - 1); } if (e.key === 'ArrowRight' && editingIndex < selectedFiles.length - 1) { e.preventDefault(); tryNavigate(editingIndex + 1); } });
+        // ---------- 키보드 ----------
+        document.addEventListener('keydown', (e) => {
+            if (!editorOverlay.classList.contains('active') || saveModal.classList.contains('active')) return;
+            const typing = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+            if (e.key === 'Escape') { if (typing) document.activeElement.blur(); else tryClose(); return; }
+            if (typing) return;
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); if (e.shiftKey) redoEdit(); else undoEdit(); }
+            else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') { e.preventDefault(); redoEdit(); }
+            else if (e.code === 'Space') { e.preventDefault(); if (!spaceDown) { spaceDown = true; canvasStage.classList.add('pan'); brushCursor.classList.remove('active'); } }
+            else if (e.key === 'ArrowLeft' && editingIndex > 0) { e.preventDefault(); tryNavigate(editingIndex - 1); }
+            else if (e.key === 'ArrowRight' && editingIndex < selectedFiles.length - 1) { e.preventDefault(); tryNavigate(editingIndex + 1); }
+            else if (e.key === '+' || e.key === '=') { const r = canvasArea.getBoundingClientRect(); zoomAt(zoomLevel * 1.25, r.left + r.width / 2, r.top + r.height / 2); }
+            else if (e.key === '-') { const r = canvasArea.getBoundingClientRect(); zoomAt(zoomLevel / 1.25, r.left + r.width / 2, r.top + r.height / 2); }
+            else if (e.key === '0') fitStage(true);
+        });
+        document.addEventListener('keyup', (e) => { if (e.code === 'Space') { spaceDown = false; canvasStage.classList.toggle('pan', currentTool === 'transform'); } });
+
+        refreshOptions();
 
         // ===== 에셋 태그 시스템 =====
         const tagBtn = document.getElementById('tagBtn');
@@ -1539,7 +1690,7 @@ else if (currentTool === 'smart-eraser') {
                 chip.append(text, x);
                 chip.addEventListener('click', (e) => {
                     if (e.target === x) { favNames = favNames.filter(n => n !== name); saveFavNames(); renderFavNames(); showToast('⭐ 삭제: ' + name); return; }
-                    if (keepOriginalCheckbox.checked) { keepOriginalCheckbox.checked = false; baseFilenameInput.classList.remove('disabled'); }
+                    if (keepOriginalCheckbox.checked || randomEachToggle.checked) { keepOriginalCheckbox.checked = false; randomEachToggle.checked = false; baseFilenameInput.classList.remove('disabled'); }
                     baseFilenameInput.value = name;
                     updateImageGrid();
                     renderFavNames();
@@ -1561,7 +1712,7 @@ else if (currentTool === 'smart-eraser') {
         // 🔢 무작위 숫자 이름 (8자리, 0으로 시작하지 않음)
         const randomNumBtn = document.getElementById('randomNumBtn');
         randomNumBtn.addEventListener('click', () => {
-            if (keepOriginalCheckbox.checked) { keepOriginalCheckbox.checked = false; baseFilenameInput.classList.remove('disabled'); }
+            if (keepOriginalCheckbox.checked || randomEachToggle.checked) { keepOriginalCheckbox.checked = false; randomEachToggle.checked = false; baseFilenameInput.classList.remove('disabled'); }
             baseFilenameInput.value = String(Math.floor(10000000 + Math.random() * 90000000));
             updateImageGrid();
             renderFavNames();
@@ -1569,6 +1720,58 @@ else if (currentTool === 'smart-eraser') {
         });
         renderFavNames();
 
+
+        // 📦 ZIP 묶어받기 (압축 없이 저장만 하는 ZIP → 외부 라이브러리 불필요, 한글 파일명 UTF-8)
+        const CRC_TABLE = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+        function crc32(u8) { let c = 0xFFFFFFFF; for (let i = 0; i < u8.length; i++) c = CRC_TABLE[(c ^ u8[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+        async function makeZip(entries) {
+            const enc = new TextEncoder(), parts = [], central = [], now = new Date();
+            const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1), dosDate = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+            let offset = 0;
+            for (const e of entries) {
+                const data = new Uint8Array(await e.blob.arrayBuffer()), name = enc.encode(e.name), crc = crc32(data);
+                const lh = new DataView(new ArrayBuffer(30));
+                lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, 0, true); lh.setUint16(10, dosTime, true); lh.setUint16(12, dosDate, true);
+                lh.setUint32(14, crc, true); lh.setUint32(18, data.length, true); lh.setUint32(22, data.length, true); lh.setUint16(26, name.length, true); lh.setUint16(28, 0, true);
+                parts.push(lh.buffer, name, data);
+                const ch = new DataView(new ArrayBuffer(46));
+                ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true); ch.setUint16(12, dosTime, true); ch.setUint16(14, dosDate, true);
+                ch.setUint32(16, crc, true); ch.setUint32(20, data.length, true); ch.setUint32(24, data.length, true); ch.setUint16(28, name.length, true); ch.setUint32(42, offset, true);
+                central.push(ch.buffer, name);
+                offset += 30 + name.length + data.length;
+            }
+            const cdSize = central.reduce((s, p) => s + p.byteLength, 0), end = new DataView(new ArrayBuffer(22));
+            end.setUint32(0, 0x06054b50, true); end.setUint16(8, entries.length, true); end.setUint16(10, entries.length, true); end.setUint32(12, cdSize, true); end.setUint32(16, offset, true);
+            return new Blob([...parts, ...central, end.buffer], { type: 'application/zip' });
+        }
+        const zipToggle = document.getElementById('zipToggle');
+        try { zipToggle.checked = localStorage.getItem('zipDownload') === '1'; } catch (e) {}
+        zipToggle.addEventListener('change', () => { try { localStorage.setItem('zipDownload', zipToggle.checked ? '1' : '0'); } catch (e) {} });
+
+        // 📋 Ctrl+V로 클립보드 이미지 붙여넣기
+        let pasteCount = 0;
+        document.addEventListener('paste', (e) => {
+            if (editorOverlay.classList.contains('active')) return;
+            const files = Array.from((e.clipboardData && e.clipboardData.files) || []).filter(f => supportedTypes.includes(f.type));
+            if (!files.length) return;
+            e.preventDefault();
+            handleFiles(files.map(f => new File([f], `붙여넣기_${++pasteCount}.${(f.type.split('/')[1] || 'png').replace('jpeg', 'jpg')}`, { type: f.type })));
+            showToast('📋 ' + files.length + '개 이미지 붙여넣기');
+        });
+
+        // 🔢 파일마다 다른 무작위 숫자 (파일별로 고정 → 미리보기와 실제 저장 이름이 같음)
+        const randomEachToggle = document.getElementById('randomEachToggle');
+        let randomIdMap = new WeakMap(), usedRandomIds = new Set();
+        function randomIdFor(file) {
+            if (!randomIdMap.has(file)) { let n; do { n = String(Math.floor(10000000 + Math.random() * 90000000)); } while (usedRandomIds.has(n)); usedRandomIds.add(n); randomIdMap.set(file, n); }
+            return randomIdMap.get(file);
+        }
+        randomEachToggle.addEventListener('change', () => {
+            if (randomEachToggle.checked) { randomIdMap = new WeakMap(); usedRandomIds = new Set(); if (keepOriginalCheckbox.checked) keepOriginalCheckbox.checked = false; }
+            baseFilenameInput.classList.toggle('disabled', randomEachToggle.checked || keepOriginalCheckbox.checked);
+            updateImageGrid();
+        });
+        keepOriginalCheckbox.addEventListener('change', () => { if (keepOriginalCheckbox.checked && randomEachToggle.checked) { randomEachToggle.checked = false; baseFilenameInput.classList.add('disabled'); updateImageGrid(); } });
 
     </script>
 </body>
